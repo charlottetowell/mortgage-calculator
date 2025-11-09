@@ -24,7 +24,6 @@ const totalRepaymentsEl = document.getElementById("totalRepayments");
 const totalInterestEl = document.getElementById("totalInterest");
 const savingsEl = document.getElementById("savings");
 const yearsSavedEl = document.getElementById("yearsSaved");
-const freqLabelEl = document.getElementById("freqLabel");
 const loanDurationEl = document.getElementById("loanDuration");
 
 // --- Event listeners for auto-calculation ---
@@ -42,7 +41,6 @@ repaymentFrequencyEl.addEventListener("change", () => {
   const freq = repaymentFrequencyEl.value;
   extraFrequencyLabel.textContent = freq;
   offsetFrequencyLabel.textContent = freq;
-  freqLabelEl.textContent = freq;
   calculateAndRender();
 });
 
@@ -88,7 +86,6 @@ function calculateAndRender() {
   const totalSavings = baseline.totalPaid - accelerated.totalPaid;
   const yearsSaved = Math.max(0, baseline.totalPeriods / paymentsPerYear - accelerated.totalPeriods / paymentsPerYear);
 
-  freqLabelEl.textContent = frequency;
   totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
   totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
   totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);
