@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage Calculator</title>
+  <link rel="stylesheet" href="globals.css">
+</head>
+<body>
+  <h1>Mortgage Calculator</h1>
+
+  <!-- Top Section: Basic Loan Inputs -->
+  <section id="loan-inputs">
+    <h2>Loan Details</h2>
+    <label>
+      Loan Amount ($):
+      <input type="number" id="loanAmount" placeholder="e.g., 500000">
+    </label><br>
+
+    <label>
+      Interest Rate (%):
+      <input type="number" id="interestRate" step="0.01" placeholder="e.g., 5.5">
+    </label><br>
+
+    <label>
+      Loan Term (years):
+      <input type="number" id="loanTerm" placeholder="e.g., 30">
+    </label><br>
+
+    <label>
+      Repayment Frequency:
+      <select id="repaymentFrequency">
+        <option value="weekly">Weekly</option>
+        <option value="fortnightly">Fortnightly</option>
+        <option value="monthly" selected>Monthly</option>
+      </select>
+    </label><br>
+
+    <button id="calculateBtn">Calculate Minimum Repayments</button>
+    <p id="repaymentResult"></p>
+  </section>
+
+  <hr>
+
+  <!-- Bottom Section: Extra Repayments and Offset -->
+  <section id="extra-inputs">
+    <h2>Extra Repayments & Offset</h2>
+    <label>
+      Extra Repayments per <span id="extraFrequencyLabel">frequency</span> ($):
+      <input type="number" id="extraRepayment" placeholder="e.g., 100">
+    </label><br>
+
+    <label>
+      Initial Offset Balance ($):
+      <input type="number" id="initialOffset" placeholder="e.g., 10000">
+    </label><br>
+
+    <label>
+      Offset Contributions per <span id="offsetFrequencyLabel">frequency</span> ($):
+      <input type="number" id="offsetContribution" placeholder="e.g., 50">
+    </label><br>
+  </section>
+
+  <hr>
+
+  <!-- Calculated Fields Display -->
+  <section id="calculated-fields">
+    <h2>Calculated Results</h2>
+    <p>Total Interest Paid: <span id="totalInterest">$0</span></p>
+    <p>Total Payments Made: <span id="totalPayments">$0</span></p>
+    <p>Loan Paid Off In: <span id="loanDuration">0 years</span></p>
+  </section>
+
+  <hr>
+
+  <!-- Charts Section -->
+  <section id="charts">
+    <h2>Charts</h2>
+
+    <div>
+      <h3>Principal and Interest Balance Over Time</h3>
+      <canvas id="loanChart" width="600" height="300"></canvas>
+    </div>
+
+    <div>
+      <h3>Offset Balance Over Time</h3>
+      <canvas id="offsetChart" width="600" height="300"></canvas>
+    </div>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>

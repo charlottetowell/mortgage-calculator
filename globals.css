@@ -1,0 +1,58 @@
+/* Basic global styles */
+
+body {
+  font-family: system-ui, Arial, sans-serif;
+  margin: 2rem;
+  line-height: 1.5;
+  background: #fafafa;
+  color: #222;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0.5rem;
+}
+
+section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input, select, button {
+  padding: 0.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background: #007acc;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #005fa3;
+}
+
+hr {
+  margin: 2rem 0;
+}
+
+canvas {
+  margin-top: 1rem;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
