@@ -1,95 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mortgage Calculator</title>
-  <link rel="stylesheet" href="globals.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="globals.css" />
 </head>
 <body>
-  <h1>Mortgage Calculator</h1>
+  <header>
+    <h1>Mortgage Calculator</h1>
+  </header>
 
   <!-- Top Section: Basic Loan Inputs -->
   <section id="loan-inputs">
     <h2>Loan Details</h2>
-
-    <label>
-        Loan Amount ($):
-        <input type="number" id="loanAmount" value="500000">
-    </label><br>
-
-    <label>
-        Interest Rate (%):
-        <input type="number" id="interestRate" step="0.01" value="6">
-    </label><br>
-
-    <label>
-        Loan Term (years):
-        <input type="number" id="loanTerm" value="30">
-    </label><br>
-
-    <label>
-        Repayment Frequency:
-        <select id="repaymentFrequency">
-        <option value="weekly" selected>Weekly</option>
-        <option value="fortnightly">Fortnightly</option>
-        <option value="monthly">Monthly</option>
-        </select>
-    </label><br>
-
+    <div class="input-row">
+      <div class="input-box">
+        <label>Loan Amount ($)
+          <input type="number" id="loanAmount" value="500000">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Interest Rate (%)
+          <input type="number" id="interestRate" step="0.01" value="6">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Loan Term (years)
+          <input type="number" id="loanTerm" value="30">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Repayment Frequency
+          <select id="repaymentFrequency">
+            <option value="weekly" selected>Weekly</option>
+            <option value="fortnightly">Fortnightly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </label>
+      </div>
+    </div>
     <p id="repaymentResult"></p>
-    </section>
+  </section>
 
-
-  <hr>
-
-  <!-- Bottom Section: Extra Repayments and Offset -->
+  <!-- Extra Contributions -->
   <section id="extra-inputs">
-    <h2>Extra Repayments & Offset</h2>
+    <h2>Extra Contributions</h2>
+    <div class="input-row">
+      <div class="input-box">
+        <label>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)
+          <input type="number" id="extraRepayment" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Initial Offset Balance ($)
+          <input type="number" id="initialOffset" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Offset Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)
+          <input type="number" id="offsetContribution" value="0">
+        </label>
+      </div>
+    </div>
+  </section>
 
-    <label>
-        Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($):
-        <input type="number" id="extraRepayment" value="0">
-    </label><br>
-
-    <label>
-        Initial Offset Balance ($):
-        <input type="number" id="initialOffset" value="0">
-    </label><br>
-
-    <label>
-        Offset Contributions per <span id="offsetFrequencyLabel">weekly</span> ($):
-        <input type="number" id="offsetContribution" value="0">
-    </label><br>
-    </section>
-
-
-  <hr>
-
-  <!-- Calculated Fields Display -->]
-  <section id="summary">
+  <!-- Summary -->
+  <section id="summary" class="summary-box">
     <h2>Summary</h2>
-    <p>Total <span id="freqLabel">weekly</span> contributions: <strong id="totalContributions">$0</strong></p>
-    <p>Total repayments: <strong id="totalRepayments">$0</strong> (<small>total interest paid: <span id="totalInterest">$0</span></small>)</p>
-    <p>Extra + Offset: total saved <strong id="savings">$0</strong>, years saved <strong id="yearsSaved">0</strong></p>
-    <p>Loan Paid Off In: <span id="loanDuration">0 years</span></p>
-</section>
+    <div class="summary-grid">
+      <p><strong>Total <span id="freqLabel">weekly</span> contributions:</strong> <span id="totalContributions">$0</span></p>
+      <p><strong>Total repayments:</strong> <span id="totalRepayments">$0</span></p>
+      <p><strong>Total interest paid:</strong> <span id="totalInterest">$0</span></p>
+      <p><strong>Extra + Offset savings:</strong> <span id="savings">$0</span></p>
+      <p><strong>Years saved:</strong> <span id="yearsSaved">0</span></p>
+      <p><strong>Loan paid off in:</strong> <span id="loanDuration">0 years</span></p>
+    </div>
+  </section>
 
-
-  <hr>
-
-  <!-- Charts Section -->
+  <!-- Charts -->
   <section id="charts">
     <h2>Charts</h2>
-
-    <div>
-      <h3>Principal and Interest Balance Over Time</h3>
-      <canvas id="loanChart" width="600" height="300"></canvas>
-    </div>
-
-    <div>
-      <h3>Offset Balance Over Time</h3>
-      <canvas id="offsetChart" width="600" height="300"></canvas>
+    <div class="chart-container">
+      <div class="chart-box">
+        <h3>Loan Balance Over Time</h3>
+        <canvas id="loanChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Offset Balance Over Time</h3>
+        <canvas id="offsetChart"></canvas>
+      </div>
     </div>
   </section>
 
