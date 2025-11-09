@@ -135,6 +135,7 @@ function simulateLoan({principal, rate, repayment, paymentsPerYear, offsetInitia
     let years=[0];
     let period=0;
     const maxPeriods = paymentsPerYear*50;
+    let interestFreePeriod = null;
 
     while(balance>1e-6 && period<maxPeriods){
         period++;
@@ -150,12 +151,24 @@ function simulateLoan({principal, rate, repayment, paymentsPerYear, offsetInitia
 
         offsets = offsets.map((v,i)=>v + offsetContribs[i]);
 
+        // Track interest-free point
+        if (interestFreePeriod === null && totalOffset >= balance) {
+            interestFreePeriod = period;
+        }
+
         if(period%paymentsPerYear===0){
             years.push(period/paymentsPerYear);
             balances.push(balance);
             offsetBalances.push([...offsets]);
         }
     }
+
+    const interestFreeYear = interestFreePeriod ? interestFreePeriod / paymentsPerYear : null;
+
+    const interestFreePointEl = document.getElementById("interestFreePoint");
+    interestFreePointEl.textContent = interestFreeYear 
+        ? `${interestFreeYear.toFixed(2)} years` 
+        : "N/A";
 
     const lastYear = years[years.length-1];
     const payoffYear = period/paymentsPerYear;
