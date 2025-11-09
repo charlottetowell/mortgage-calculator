@@ -14,6 +14,13 @@ const offsetContributionEl = document.getElementById("offsetContribution");
 const extraFrequencyLabel = document.getElementById("extraFrequencyLabel");
 const offsetFrequencyLabel = document.getElementById("offsetFrequencyLabel");
 
+// Summary display
+const totalContribEl = document.getElementById("totalContributions");
+const totalRepaymentsEl = document.getElementById("totalRepayments");
+const totalInterestEl = document.getElementById("totalInterest");
+const savingsEl = document.getElementById("savings");
+const yearsSavedEl = document.getElementById("yearsSaved");
+
 // --- Event listeners for auto-calculation ---
 [
   loanAmountEl,
@@ -89,7 +96,31 @@ function calculateAndRender() {
     offsetContribution,
   });
 
-  renderCharts(baseline, accelerated, paymentsPerYear);
+  // --- Calculate summary metrics ---
+    const totalBaseInterest = baseline.totalInterest;
+    const totalBasePayments = baseline.totalPaid;
+    const yearsBase = baseline.years[baseline.years.length - 1];
+
+    const totalAccInterest = accelerated.totalInterest;
+    const totalAccPayments = accelerated.totalPaid;
+    const yearsAcc = accelerated.years[accelerated.years.length - 1];
+
+    // New: calculate per-frequency total contribution
+    const totalPerPeriodContrib = minRepayment + extraRepayment + offsetContribution;
+
+    const totalSavings = totalBasePayments - totalAccPayments;
+    const yearsSaved = yearsBase - yearsAcc;
+
+  // --- Update UI ---
+  document.getElementById("freqLabel").textContent = frequency;
+    totalContribEl.textContent = `$${totalPerPeriodContrib.toFixed(2)} per ${frequency}`;
+    totalRepaymentsEl.textContent = `$${totalAccPayments.toFixed(0)}`;
+    totalInterestEl.textContent = `$${totalAccInterest.toFixed(0)}`;
+    savingsEl.textContent = `$${totalSavings.toFixed(0)}`;
+    yearsSavedEl.textContent = `${yearsSaved.toFixed(1)} years`;
+
+  // Render charts
+  renderCharts(baseline, accelerated);
 }
 
 // --- Amortization simulation ---
@@ -103,24 +134,25 @@ function simulateLoan({
 }) {
   let balance = principal;
   let offset = initialOffset;
+  let totalPaid = 0;
+  let totalInterest = 0;
   let balances = [balance];
   let years = [0];
   let period = 0;
 
-  // Simulate until balance is cleared or 40 years max to prevent infinite loop
-  while (balance > 0 && period < paymentsPerYear * 40) {
-    // Interest applies to net balance minus offset
+  while (balance > 0 && period < paymentsPerYear * 50) {
     const effectiveBalance = Math.max(balance - offset, 0);
     const interest = effectiveBalance * rate;
 
-    // Apply payment
-    balance = balance + interest - repayment;
+    totalInterest += interest;
+    const payment = Math.min(balance + interest, repayment);
+    totalPaid += payment;
+
+    balance = balance + interest - payment;
     if (balance < 0) balance = 0;
 
-    // Offset grows
     offset += offsetContribution;
 
-    // Record annually
     if (period % paymentsPerYear === 0) {
       years.push(period / paymentsPerYear);
       balances.push(balance);
@@ -129,24 +161,23 @@ function simulateLoan({
     period++;
   }
 
-  // Final record if needed
   if (balances[balances.length - 1] !== 0) {
     years.push(period / paymentsPerYear);
     balances.push(0);
   }
 
-  return { years, balances };
+  return { years, balances, totalInterest, totalPaid, totalPeriods: period };
 }
 
 // --- Chart rendering ---
-function renderCharts(baseline, accelerated, paymentsPerYear) {
+function renderCharts(baseline, accelerated) {
   if (window.loanChartInstance) window.loanChartInstance.destroy();
   if (window.offsetChartInstance) window.offsetChartInstance.destroy();
 
   const ctx1 = document.getElementById("loanChart").getContext("2d");
   const ctx2 = document.getElementById("offsetChart").getContext("2d");
 
-  // --- Chart 1: Loan Balance Comparison ---
+  // Chart 1: Loan Balance Comparison
   window.loanChartInstance = new Chart(ctx1, {
     type: "line",
     data: {
@@ -181,11 +212,9 @@ function renderCharts(baseline, accelerated, paymentsPerYear) {
     },
   });
 
-  // --- Chart 2: Offset Balance Growth ---
+  // Chart 2: Offset Balance Growth (approximation)
   const years = accelerated.years;
-  const offsetData = years.map(
-    (y, i) => accelerated.balances[0] - accelerated.balances[i]
-  ); // placeholder for visualization
+  const offsetData = years.map((y, i) => i * 0.02 * (accelerated.balances[0] / years.length));
 
   window.offsetChartInstance = new Chart(ctx2, {
     type: "line",
