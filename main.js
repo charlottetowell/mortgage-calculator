@@ -5,21 +5,35 @@ const loanAmountEl = document.getElementById("loanAmount");
 const interestRateEl = document.getElementById("interestRate");
 const loanTermEl = document.getElementById("loanTerm");
 const repaymentFrequencyEl = document.getElementById("repaymentFrequency");
-const calculateBtn = document.getElementById("calculateBtn");
 const repaymentResultEl = document.getElementById("repaymentResult");
 
-// Frequency labels and display
+const extraRepaymentEl = document.getElementById("extraRepayment");
+const initialOffsetEl = document.getElementById("initialOffset");
+const offsetContributionEl = document.getElementById("offsetContribution");
+
 const extraFrequencyLabel = document.getElementById("extraFrequencyLabel");
 const offsetFrequencyLabel = document.getElementById("offsetFrequencyLabel");
+
+// --- Event listeners for auto-calculation ---
+[
+  loanAmountEl,
+  interestRateEl,
+  loanTermEl,
+  repaymentFrequencyEl,
+  extraRepaymentEl,
+  initialOffsetEl,
+  offsetContributionEl,
+].forEach((el) => el.addEventListener("input", calculateAndRender));
 
 repaymentFrequencyEl.addEventListener("change", () => {
   const freq = repaymentFrequencyEl.value;
   extraFrequencyLabel.textContent = freq;
   offsetFrequencyLabel.textContent = freq;
+  calculateAndRender();
 });
 
-// Calculate minimum repayments
-calculateBtn.addEventListener("click", () => {
+// --- Core calculation ---
+function calculateAndRender() {
   const loanAmount = parseFloat(loanAmountEl.value);
   const annualRate = parseFloat(interestRateEl.value) / 100;
   const years = parseFloat(loanTermEl.value);
@@ -43,11 +57,11 @@ calculateBtn.addEventListener("click", () => {
       paymentsPerYear = 12;
   }
 
-  // Calculate periodic interest rate and number of payments
+  // Calculate periodic rate and total payments
   const periodicRate = annualRate / paymentsPerYear;
   const totalPayments = years * paymentsPerYear;
 
-  // Standard amortization formula
+  // Amortization formula
   const repayment =
     (loanAmount * periodicRate) / (1 - Math.pow(1 + periodicRate, -totalPayments));
 
@@ -55,18 +69,16 @@ calculateBtn.addEventListener("click", () => {
     2
   )}`;
 
-  // Generate sample data for charts
   renderCharts(years);
-});
+}
 
 // --- Chart.js Charts ---
 function renderCharts(years) {
   const yearsArray = Array.from({ length: years + 1 }, (_, i) => i);
   const principalData = yearsArray.map((y) => Math.max(0, 100 - y * (100 / years)));
   const interestData = yearsArray.map((y) => Math.max(0, 100 - y * (70 / years)));
-  const offsetData = yearsArray.map((y) => y * 2); // placeholder
+  const offsetData = yearsArray.map((y) => y * 2);
 
-  // Destroy existing charts if they exist
   if (window.loanChartInstance) window.loanChartInstance.destroy();
   if (window.offsetChartInstance) window.offsetChartInstance.destroy();
 
@@ -135,11 +147,14 @@ function renderCharts(years) {
   });
 }
 
-// --- Load Chart.js dynamically if not included in HTML ---
+// --- Load Chart.js dynamically ---
 (function loadChartJS() {
   if (!window.Chart) {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+    script.onload = calculateAndRender; // auto-run when ready
     document.head.appendChild(script);
+  } else {
+    calculateAndRender();
   }
 })();
