@@ -5,6 +5,20 @@ function formatCurrency(amount) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 
+// Dark/Light mode toggle
+const themeToggleBtn = document.getElementById("themeToggle");
+
+themeToggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  // Toggle emoji
+  if (document.body.classList.contains("dark-mode")) {
+    themeToggleBtn.textContent = "🌙";
+  } else {
+    themeToggleBtn.textContent = "🌞";
+  }
+});
+
+
 // --- DOM Elements ---
 const loanAmountEl = document.getElementById("loanAmount");
 const interestRateEl = document.getElementById("interestRate");
