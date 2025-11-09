@@ -10,11 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="globals.css" />
 </head>
-<body>
+<body class="dark-mode">
     <div class="body-inner">
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌞</button>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
   <header>
-    <h1>Mortgage Calculator</h1>
+    <h1>🏠 Mortgage Calculator 💸</h1>
   </header>
 
   <!-- Top Section: Basic Loan Inputs -->
@@ -23,12 +23,12 @@
     <div class="input-row">
       <div class="input-box">
         <label>Loan Amount ($)
-          <input type="number" id="loanAmount" value="500000">
+          <input type="number" id="loanAmount" value="660000">
         </label>
       </div>
       <div class="input-box">
         <label>Interest Rate (%)
-          <input type="number" id="interestRate" step="0.01" value="6">
+          <input type="number" id="interestRate" step="0.01" value="5.49">
         </label>
       </div>
       <div class="input-box">
@@ -75,12 +75,10 @@
   <section id="summary" class="summary-box">
     <h2>Summary</h2>
     <div class="summary-grid">
-      <p><strong>Total frequent contributions:</strong> <span id="totalContributions">$0</span></p>
-      <p><strong>Total repayments:</strong> <span id="totalRepayments">$0</span></p>
-      <p><strong>Total interest paid:</strong> <span id="totalInterest">$0</span></p>
-      <p><strong>Extra + Offset savings:</strong> <span id="savings">$0</span></p>
-      <p><strong>Years saved:</strong> <span id="yearsSaved">0</span></p>
-      <p><strong>Loan paid off in:</strong> <span id="loanDuration">0 years</span></p>
+      <p><strong>Total frequent contributions:</strong><span><span id="totalContributions">$0</span></span></p>
+      <p><strong>Total repayments:</strong><span><span id="totalRepayments">$0</span> (Total interest: <span id="totalInterest">$0</span>)</span></p>
+      <p><strong>Extra + Offset savings:</strong><span><span id="savings">$0</span></span></p>
+      <p><strong>Loan paid off in:</strong><span><span id="loanDuration">0 years</span> (Saved: <span id="yearsSaved">0</span>)</span></p>
     </div>
   </section>
 

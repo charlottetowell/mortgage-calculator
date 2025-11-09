@@ -4,7 +4,7 @@
 :root {
   /* Fonts & sizing */
   --font-family: "Karla", 'Inter', system-ui, sans-serif;
-  --font-size-base: 16px;
+  --font-size-base: 1rem;
   --border-radius: 12px;
   --gap: 1rem;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -101,11 +101,8 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  /* Flexible width: grow, shrink, minimum width */
   flex: 1 1 250px;
   min-width: 250px;
-  margin-bottom: var(--gap);
 }
 
 .input-box label {
@@ -206,6 +203,10 @@ canvas {
   }
 
   .summary-grid p {
+    flex: 1 1 100%;
+  }
+
+  .input-box {
     flex: 1 1 100%;
   }
 }

@@ -2,7 +2,13 @@
 
 // Format numbers as currency (e.g., $578,451.99)
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    const rounded = Math.round(amount); // Round to nearest dollar
+    return new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: 'USD', 
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(rounded);
 }
 
 // Dark/Light mode toggle
