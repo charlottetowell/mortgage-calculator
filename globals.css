@@ -14,6 +14,9 @@
   --gap: 1rem;
 }
 
+/* ==============================
+   Base Layout
+   ============================== */
 html, body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
@@ -64,14 +67,16 @@ h2 {
 .input-row {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;   /* ✅ prevents uneven stretching */
   gap: var(--gap);
   margin-top: 1rem;
 }
 
 .input-box {
-  flex: 1 1 220px;
+  flex: 1 1 calc(25% - var(--gap)); /* ✅ better proportional sizing */
   display: flex;
   flex-direction: column;
+  min-width: 200px; /* ensures wrap before overlap */
 }
 
 label {
@@ -88,13 +93,14 @@ select {
   font-size: 1rem;
   background: #fff;
   width: 100%;
+  box-sizing: border-box; /* ✅ ensures padding doesn’t overflow */
 }
 
 input:focus,
 select:focus {
   border-color: var(--color-primary);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+  box-shadow: 0 0 0 2px rgba(102, 103, 171, 0.25);
 }
 
 /* ==============================
@@ -154,10 +160,20 @@ canvas {
   .input-row,
   .chart-container {
     flex-direction: column;
+    gap: 0.6rem; /* ✅ tighter spacing on small screens */
+  }
+
+  .input-box {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  section {
+    padding: 1rem;
   }
 
   header {
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 1rem;
   }
 
   h1 {
