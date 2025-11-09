@@ -245,36 +245,40 @@ function renderCharts(baseline, accelerated) {
   window.loanChartInstance = new Chart(ctx1, {
     type: "line",
     data: {
-      labels,
-      datasets: [
+        labels,
+        datasets: [
         {
-          label: "Original Loan (Min Repayments)",
-          data: baselineData,
-          borderColor: "blue",
-          borderWidth: 2,
-          fill: false,
+            label: "Original Loan",
+            data: baselineData,
+            borderColor: "#6667ab",
+            borderWidth: 3,
+            fill: true,
+            backgroundColor: "rgba(102, 103, 171, 0.15)",
+            tension: 0.4,
+            pointRadius: 0
         },
         {
-          label: "With Extra & Offset",
-          data: acceleratedData,
-          borderColor: "green",
-          borderWidth: 2,
-          fill: false,
-        },
-      ],
+            label: "With Extra & Offset",
+            data: acceleratedData,
+            borderColor: "#cba6f7",
+            borderWidth: 3,
+            fill: true,
+            backgroundColor: "rgba(203, 166, 247, 0.15)",
+            tension: 0.4,
+            pointRadius: 0
+        }
+        ]
     },
     options: {
-      responsive: true,
-      plugins: {
-        legend: { position: "top" },
-        title: { display: true, text: "Loan Balance Over Time" },
-      },
-      scales: {
-        x: { title: { display: true, text: "Years" } },
-        y: { title: { display: true, text: "Loan Balance ($)" } },
-      },
-    },
-  });
+        responsive: true,
+        plugins: { legend: { position: "none" } },
+        scales: {
+            x: { title: { display: false, text: "Years" } },
+            y: { title: { display: false, text: "Loan Balance ($)" }, min: 0 },
+        },
+    }
+    });
+
 
   // Chart 2: Offset Balance Over Time (use accelerated.offsetBalances; baseline has no offset)
   const offsetData = labels.map((y) =>
@@ -284,29 +288,29 @@ function renderCharts(baseline, accelerated) {
   window.offsetChartInstance = new Chart(ctx2, {
     type: "line",
     data: {
-      labels,
-      datasets: [
+        labels,
+        datasets: [
         {
-          label: "Offset Balance ($)",
-          data: offsetData,
-          borderWidth: 2,
-          borderColor: "orange",
-          fill: false,
-        },
-      ],
+            label: "Offset Balance ($)",
+            data: offsetData,
+            borderColor: "#6667ab",
+            borderWidth: 3,
+            fill: true,
+            backgroundColor: "rgba(102, 103, 171, 0.15)",
+            tension: 0.4,
+            pointRadius: 0
+        }
+        ]
     },
     options: {
-      responsive: true,
-      plugins: {
-        legend: { position: "top" },
-        title: { display: true, text: "Offset Balance Over Time" },
-      },
-      scales: {
-        x: { title: { display: true, text: "Years" } },
-        y: { title: { display: true, text: "Offset Balance ($)" } },
-      },
-    },
-  });
+        responsive: true,
+        plugins: { legend: { position: "none" } },
+        scales: {
+            x: { title: { display: false, text: "Years" } },
+            y: { title: { display: false, text: "Offset Balance ($)" }, min: 0 },
+        },
+    }
+    });
 }
 
 // --- Load Chart.js dynamically ---
