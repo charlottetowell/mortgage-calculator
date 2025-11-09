@@ -1,6 +1,11 @@
 // --- Mortgage Calculator Logic ---
 
-// DOM elements
+// Format numbers as currency (e.g., $578,451.99)
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+}
+
+// --- DOM Elements ---
 const loanAmountEl = document.getElementById("loanAmount");
 const interestRateEl = document.getElementById("interestRate");
 const loanTermEl = document.getElementById("loanTerm");
@@ -14,13 +19,13 @@ const offsetContributionEl = document.getElementById("offsetContribution");
 const extraFrequencyLabel = document.getElementById("extraFrequencyLabel");
 const offsetFrequencyLabel = document.getElementById("offsetFrequencyLabel");
 
-// Summary display
 const totalContribEl = document.getElementById("totalContributions");
 const totalRepaymentsEl = document.getElementById("totalRepayments");
 const totalInterestEl = document.getElementById("totalInterest");
 const savingsEl = document.getElementById("savings");
 const yearsSavedEl = document.getElementById("yearsSaved");
 const freqLabelEl = document.getElementById("freqLabel");
+const loanDurationEl = document.getElementById("loanDuration");
 
 // --- Event listeners for auto-calculation ---
 [
@@ -31,7 +36,7 @@ const freqLabelEl = document.getElementById("freqLabel");
   extraRepaymentEl,
   initialOffsetEl,
   offsetContributionEl,
-].forEach((el) => el.addEventListener("input", calculateAndRender));
+].forEach(el => el.addEventListener("input", calculateAndRender));
 
 repaymentFrequencyEl.addEventListener("change", () => {
   const freq = repaymentFrequencyEl.value;
@@ -41,7 +46,7 @@ repaymentFrequencyEl.addEventListener("change", () => {
   calculateAndRender();
 });
 
-// --- Core calculation ---
+// --- Core Calculation ---
 function calculateAndRender() {
   const loanAmount = parseFloat(loanAmountEl.value);
   const annualRate = parseFloat(interestRateEl.value) / 100;
@@ -57,126 +62,67 @@ function calculateAndRender() {
     return;
   }
 
-  // Determine payments per year
-  let paymentsPerYear;
-  switch (frequency) {
-    case "weekly":
-      paymentsPerYear = 52;
-      break;
-    case "fortnightly":
-      paymentsPerYear = 26;
-      break;
-    default:
-      paymentsPerYear = 12;
-  }
-
+  let paymentsPerYear = frequency === "weekly" ? 52 : frequency === "fortnightly" ? 26 : 12;
   const periodicRate = annualRate / paymentsPerYear;
   const totalPayments = years * paymentsPerYear;
 
-  // Minimum repayment (standard amortization formula)
-  // guard against zero interest
-  const minRepayment =
-    periodicRate === 0
+  const minRepayment = periodicRate === 0
       ? loanAmount / totalPayments
       : (loanAmount * periodicRate) / (1 - Math.pow(1 + periodicRate, -totalPayments));
 
-  repaymentResultEl.textContent = `Minimum ${frequency} repayment: $${minRepayment.toFixed(
-    2
-  )}`;
+  repaymentResultEl.textContent = `Minimum ${frequency} repayment: ${formatCurrency(minRepayment)}`;
 
-  // Simulate both loan scenarios
-  const baseline = simulateLoan({
-    principal: loanAmount,
-    rate: periodicRate,
-    repayment: minRepayment,
-    paymentsPerYear,
-    // no offset or extras for baseline
-  });
-
+  // --- Simulate Loans ---
+  const baseline = simulateLoan({ principal: loanAmount, rate: periodicRate, repayment: minRepayment, paymentsPerYear });
   const accelerated = simulateLoan({
-    principal: loanAmount,
-    rate: periodicRate,
-    repayment: minRepayment + extraRepayment,
-    paymentsPerYear,
-    initialOffset,
-    offsetContribution,
+      principal: loanAmount,
+      rate: periodicRate,
+      repayment: minRepayment + extraRepayment,
+      paymentsPerYear,
+      initialOffset,
+      offsetContribution
   });
 
-  // --- Calculate summary metrics ---
-  const totalBaseInterest = baseline.totalInterest;
-  const totalBasePayments = baseline.totalPaid;
-  const yearsBase = baseline.totalPeriods / paymentsPerYear;
-
-  const totalAccInterest = accelerated.totalInterest;
-  const totalAccPayments = accelerated.totalPaid;
-  const yearsAcc = accelerated.totalPeriods / paymentsPerYear;
-
-  // Per-period contribution (e.g. per week)
+  // --- Summary Metrics ---
   const totalPerPeriodContrib = minRepayment + extraRepayment + offsetContribution;
+  const totalSavings = baseline.totalPaid - accelerated.totalPaid;
+  const yearsSaved = Math.max(0, baseline.totalPeriods / paymentsPerYear - accelerated.totalPeriods / paymentsPerYear);
 
-  const totalSavings = totalBasePayments - totalAccPayments;
-  const yearsSaved = Math.max(0, yearsBase - yearsAcc);
-
-  // --- Update UI ---
   freqLabelEl.textContent = frequency;
-  totalContribEl.textContent = `$${totalPerPeriodContrib.toFixed(2)} per ${frequency}`;
-  totalRepaymentsEl.textContent = `$${totalAccPayments.toFixed(2)}`;
-  totalInterestEl.textContent = `$${totalAccInterest.toFixed(2)}`;
-  savingsEl.textContent = `$${totalSavings.toFixed(2)}`;
+  totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
+  totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
+  totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);
+  savingsEl.textContent = formatCurrency(totalSavings);
   yearsSavedEl.textContent = `${yearsSaved.toFixed(2)} years`;
+  if (loanDurationEl) loanDurationEl.textContent = `${(accelerated.totalPeriods / paymentsPerYear).toFixed(2)} years`;
 
-  // Also update "Loan paid off in" and "Total interest paid" if you have those elements
-  const loanDurationEl = document.getElementById("loanDuration");
-  if (loanDurationEl) loanDurationEl.textContent = `${yearsAcc.toFixed(2)} years`;
-
-  // Render charts (offset series included)
   renderCharts(baseline, accelerated);
 }
 
-// --- Amortization simulation ---
-// Returns balances & offset balances recorded at end of each whole year plus final partial year,
-// totalInterest, totalPaid, and totalPeriods (number of periods/payments until payoff)
-function simulateLoan({
-  principal,
-  rate,
-  repayment,
-  paymentsPerYear,
-  initialOffset = 0,
-  offsetContribution = 0,
-}) {
+// --- Amortization Simulation ---
+function simulateLoan({ principal, rate, repayment, paymentsPerYear, initialOffset = 0, offsetContribution = 0 }) {
   let balance = principal;
   let offset = initialOffset;
   let totalPaid = 0;
   let totalInterest = 0;
-  let balances = [principal]; // year 0
-  let offsetBalances = [initialOffset]; // year 0
+  let balances = [principal];
+  let offsetBalances = [initialOffset];
   let years = [0];
   let period = 0;
-  const maxPeriods = paymentsPerYear * 50; // safety cap
+  const maxPeriods = paymentsPerYear * 50;
 
-  // We'll simulate period-by-period. At the end of each year (period%paymentsPerYear === 0),
-  // we'll record the balances. When loan finishes mid-year, record the final fractional year.
-  while (balance > 0.000001 && period < maxPeriods) {
+  while (balance > 1e-6 && period < maxPeriods) {
     period++;
-
-    // Interest applies to net balance minus offset (but not below 0)
     const effectiveBalance = Math.max(balance - offset, 0);
     const interest = effectiveBalance * rate;
-
-    // Payment for this period (can't pay more than outstanding + interest)
     const payment = Math.min(balance + interest, repayment);
 
     totalInterest += interest;
     totalPaid += payment;
-
-    // Update balance and offset for next period
     balance = balance + interest - payment;
     if (balance < 1e-8) balance = 0;
-
-    // Offset contributions are added at the same cadence as repayments.
     offset += offsetContribution;
 
-    // At the end of a whole year, capture a data point
     if (period % paymentsPerYear === 0) {
       years.push(period / paymentsPerYear);
       balances.push(balance);
@@ -184,26 +130,18 @@ function simulateLoan({
     }
   }
 
-  // If loan finished and last recorded year isn't the final payoff year, add final fractional year
-  const lastRecordedYear = years[years.length - 1];
+  const lastYear = years[years.length - 1];
   const payoffYear = period / paymentsPerYear;
-  if (Math.abs(lastRecordedYear - payoffYear) > 1e-8) {
+  if (Math.abs(lastYear - payoffYear) > 1e-8) {
     years.push(payoffYear);
     balances.push(0);
     offsetBalances.push(offset);
   }
 
-  return {
-    years,
-    balances,
-    offsetBalances,
-    totalInterest,
-    totalPaid,
-    totalPeriods: period,
-  };
+  return { years, balances, offsetBalances, totalInterest, totalPaid, totalPeriods: period };
 }
 
-// --- Chart rendering ---
+// --- Chart Rendering ---
 function renderCharts(baseline, accelerated) {
   if (window.loanChartInstance) window.loanChartInstance.destroy();
   if (window.offsetChartInstance) window.offsetChartInstance.destroy();
@@ -211,106 +149,91 @@ function renderCharts(baseline, accelerated) {
   const ctx1 = document.getElementById("loanChart").getContext("2d");
   const ctx2 = document.getElementById("offsetChart").getContext("2d");
 
-  // Align X labels: use union of both years arrays (they should be mostly integers, plus possibly a final fractional year)
-  const maxYear = Math.max(
-    baseline.years[baseline.years.length - 1],
-    accelerated.years[accelerated.years.length - 1]
-  );
-  // Build labels at 0,1,2,...,ceil(maxYear) and then ensure final fractional year is included if needed
+  const maxYear = Math.max(baseline.years[baseline.years.length - 1], accelerated.years[accelerated.years.length - 1]);
   const labels = [];
   for (let y = 0; y <= Math.floor(maxYear); y++) labels.push(y);
-  const finalYear = Math.round(maxYear * 100) / 100; // keep 2dp if fractional
+  const finalYear = Math.round(maxYear * 100) / 100;
   if (finalYear > labels[labels.length - 1]) labels.push(Number(finalYear.toFixed(2)));
 
-  // Helper to sample balances for given integer/fractional years from the recorded arrays
-  function sampleAtYear(recordedYears, recordedValues, targetYear) {
-    // If exact match exists, return it
+  const sampleAtYear = (recordedYears, recordedValues, targetYear) => {
     for (let i = 0; i < recordedYears.length; i++) {
       if (Math.abs(recordedYears[i] - targetYear) < 1e-8) return recordedValues[i];
     }
-    // Otherwise, find the first recorded year > targetYear and take previous value (step function)
     for (let i = 1; i < recordedYears.length; i++) {
       if (recordedYears[i] > targetYear) return recordedValues[i - 1];
     }
-    // If target beyond last recorded year, return last value
     return recordedValues[recordedValues.length - 1];
-  }
+  };
 
-  const baselineData = labels.map((y) => sampleAtYear(baseline.years, baseline.balances, y));
-  const acceleratedData = labels.map((y) =>
-    sampleAtYear(accelerated.years, accelerated.balances, y)
-  );
+  const baselineData = labels.map(y => sampleAtYear(baseline.years, baseline.balances, y));
+  const acceleratedData = labels.map(y => sampleAtYear(accelerated.years, accelerated.balances, y));
+  const offsetData = labels.map(y => sampleAtYear(accelerated.years, accelerated.offsetBalances, y));
 
-  // Chart 1: Loan Balance Comparison
+  // Loan Balance Chart
   window.loanChartInstance = new Chart(ctx1, {
     type: "line",
     data: {
-        labels,
-        datasets: [
+      labels,
+      datasets: [
         {
-            label: "Original Loan",
-            data: baselineData,
-            borderColor: "#6667ab",
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: "rgba(102, 103, 171, 0.15)",
-            tension: 0.4,
-            pointRadius: 0
+          label: "Original Loan",
+          data: baselineData,
+          borderColor: "#6667ab",
+          borderWidth: 3,
+          fill: true,
+          backgroundColor: "rgba(102, 103, 171, 0.15)",
+          tension: 0.4,
+          pointRadius: 0
         },
         {
-            label: "With Extra & Offset",
-            data: acceleratedData,
-            borderColor: "#cba6f7",
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: "rgba(203, 166, 247, 0.15)",
-            tension: 0.4,
-            pointRadius: 0
+          label: "With Extra & Offset",
+          data: acceleratedData,
+          borderColor: "#cba6f7",
+          borderWidth: 3,
+          fill: true,
+          backgroundColor: "rgba(203, 166, 247, 0.15)",
+          tension: 0.4,
+          pointRadius: 0
         }
-        ]
+      ]
     },
     options: {
-        responsive: true,
-        plugins: { legend: { position: "none" } },
-        scales: {
-            x: { title: { display: false, text: "Years" } },
-            y: { title: { display: false, text: "Loan Balance ($)" }, min: 0 },
-        },
+      responsive: true,
+      plugins: { legend: { position: "none" } },
+      scales: {
+        x: { title: { display: false } },
+        y: { title: { display: false }, min: 0 },
+      },
     }
-    });
+  });
 
-
-  // Chart 2: Offset Balance Over Time (use accelerated.offsetBalances; baseline has no offset)
-  const offsetData = labels.map((y) =>
-    sampleAtYear(accelerated.years, accelerated.offsetBalances, y)
-  );
-
+  // Offset Balance Chart
   window.offsetChartInstance = new Chart(ctx2, {
     type: "line",
     data: {
-        labels,
-        datasets: [
+      labels,
+      datasets: [
         {
-            label: "Offset Balance ($)",
-            data: offsetData,
-            borderColor: "#6667ab",
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: "rgba(102, 103, 171, 0.15)",
-            tension: 0.4,
-            pointRadius: 0
+          label: "Offset Balance ($)",
+          data: offsetData,
+          borderColor: "#6667ab",
+          borderWidth: 3,
+          fill: true,
+          backgroundColor: "rgba(102, 103, 171, 0.15)",
+          tension: 0.4,
+          pointRadius: 0
         }
-        ]
+      ]
     },
     options: {
-        responsive: true,
-        plugins: { legend: { position: "none" } },
-        scales: {
-            x: { title: { display: false, text: "Years" } },
-            y: { title: { display: false, text: "Offset Balance ($)" }, min: 0 },
-        },
+      responsive: true,
+      plugins: { legend: { position: "none" } },
+      scales: {
+        x: { title: { display: false } },
+        y: { title: { display: false }, min: 0 },
+      },
     }
-    });
+  });
 }
 
 // --- Load Chart.js dynamically ---
