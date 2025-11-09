@@ -60,6 +60,7 @@ repaymentFrequencyEl.addEventListener("change", () => {
 });
 
 // --- Core Calculation ---
+// --- Core Calculation ---
 function calculateAndRender() {
     const loanAmount = parseFloat(loanAmountEl.value);
     const annualRate = parseFloat(interestRateEl.value)/100;
@@ -89,9 +90,6 @@ function calculateAndRender() {
     const minRepayment = periodicRate===0 ? loanAmount/totalPayments : (loanAmount*periodicRate)/(1-Math.pow(1+periodicRate, -totalPayments));
     repaymentResultEl.textContent = `Minimum ${frequency} repayment: ${formatCurrency(minRepayment)}`;
 
-    const totalOffsetInitial = jointOffsetInitial + holder1Initial + holder2Initial;
-    const totalOffsetContribution = jointOffsetContribution + holder1Contribution + holder2Contribution;
-
     const baseline = simulateLoan({principal:loanAmount, rate:periodicRate, repayment:minRepayment, paymentsPerYear});
     const accelerated = simulateLoan({
         principal: loanAmount,
@@ -102,13 +100,19 @@ function calculateAndRender() {
         offsetContribs: [jointOffsetContribution, holder1Contribution, holder2Contribution]
     });
 
-    const totalPerPeriodContrib = minRepayment + extraRepayment + totalOffsetContribution;
+    // --- Updated Summary Calculations ---
+    const totalPerPeriodContrib = minRepayment + extraRepayment + jointOffsetContribution + holder1Contribution + holder2Contribution;
+
+    const jointContrib = minRepayment + jointOffsetContribution;
+    const holder1Contrib = (minRepayment + jointOffsetContribution)/2 + holder1Contribution;
+    const holder2Contrib = (minRepayment + jointOffsetContribution)/2 + holder2Contribution;
+
     const totalSavings = baseline.totalPaid - accelerated.totalPaid;
     const yearsSaved = Math.max(0, baseline.totalPeriods/paymentsPerYear - accelerated.totalPeriods/paymentsPerYear);
 
     totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
-    jointContribEl.textContent = `${formatCurrency(jointOffsetContribution)} per ${frequency}`;
-    perHolderContribEl.textContent = `${formatCurrency(holder1Contribution)} + ${formatCurrency(holder2Contribution)} per ${frequency}`;
+    jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency}`;
+    perHolderContribEl.textContent = `${formatCurrency(holder1Contrib)} / ${formatCurrency(holder2Contrib)} per ${frequency}`;
 
     totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
     totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);
@@ -118,6 +122,7 @@ function calculateAndRender() {
 
     renderCharts(baseline, accelerated);
 }
+
 
 // --- Amortization Simulation ---
 function simulateLoan({principal, rate, repayment, paymentsPerYear, offsetInitials=[0,0,0], offsetContribs=[0,0,0]}) {
