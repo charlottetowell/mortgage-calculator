@@ -39,6 +39,10 @@ function calculateAndRender() {
   const years = parseFloat(loanTermEl.value);
   const frequency = repaymentFrequencyEl.value;
 
+  const extraRepayment = parseFloat(extraRepaymentEl.value) || 0;
+  const initialOffset = parseFloat(initialOffsetEl.value) || 0;
+  const offsetContribution = parseFloat(offsetContributionEl.value) || 0;
+
   if (isNaN(loanAmount) || isNaN(annualRate) || isNaN(years)) {
     repaymentResultEl.textContent = "⚠️ Please enter valid loan details.";
     return;
@@ -57,51 +61,109 @@ function calculateAndRender() {
       paymentsPerYear = 12;
   }
 
-  // Calculate periodic rate and total payments
   const periodicRate = annualRate / paymentsPerYear;
   const totalPayments = years * paymentsPerYear;
 
-  // Amortization formula
-  const repayment =
+  // Minimum repayment (standard amortization formula)
+  const minRepayment =
     (loanAmount * periodicRate) / (1 - Math.pow(1 + periodicRate, -totalPayments));
 
-  repaymentResultEl.textContent = `Minimum ${frequency} repayment: $${repayment.toFixed(
+  repaymentResultEl.textContent = `Minimum ${frequency} repayment: $${minRepayment.toFixed(
     2
   )}`;
 
-  renderCharts(years);
+  // Simulate both loan scenarios
+  const baseline = simulateLoan({
+    principal: loanAmount,
+    rate: periodicRate,
+    repayment: minRepayment,
+    paymentsPerYear,
+  });
+
+  const accelerated = simulateLoan({
+    principal: loanAmount,
+    rate: periodicRate,
+    repayment: minRepayment + extraRepayment,
+    paymentsPerYear,
+    initialOffset,
+    offsetContribution,
+  });
+
+  renderCharts(baseline, accelerated, paymentsPerYear);
 }
 
-// --- Chart.js Charts ---
-function renderCharts(years) {
-  const yearsArray = Array.from({ length: years + 1 }, (_, i) => i);
-  const principalData = yearsArray.map((y) => Math.max(0, 100 - y * (100 / years)));
-  const interestData = yearsArray.map((y) => Math.max(0, 100 - y * (70 / years)));
-  const offsetData = yearsArray.map((y) => y * 2);
+// --- Amortization simulation ---
+function simulateLoan({
+  principal,
+  rate,
+  repayment,
+  paymentsPerYear,
+  initialOffset = 0,
+  offsetContribution = 0,
+}) {
+  let balance = principal;
+  let offset = initialOffset;
+  let balances = [balance];
+  let years = [0];
+  let period = 0;
 
+  // Simulate until balance is cleared or 40 years max to prevent infinite loop
+  while (balance > 0 && period < paymentsPerYear * 40) {
+    // Interest applies to net balance minus offset
+    const effectiveBalance = Math.max(balance - offset, 0);
+    const interest = effectiveBalance * rate;
+
+    // Apply payment
+    balance = balance + interest - repayment;
+    if (balance < 0) balance = 0;
+
+    // Offset grows
+    offset += offsetContribution;
+
+    // Record annually
+    if (period % paymentsPerYear === 0) {
+      years.push(period / paymentsPerYear);
+      balances.push(balance);
+    }
+
+    period++;
+  }
+
+  // Final record if needed
+  if (balances[balances.length - 1] !== 0) {
+    years.push(period / paymentsPerYear);
+    balances.push(0);
+  }
+
+  return { years, balances };
+}
+
+// --- Chart rendering ---
+function renderCharts(baseline, accelerated, paymentsPerYear) {
   if (window.loanChartInstance) window.loanChartInstance.destroy();
   if (window.offsetChartInstance) window.offsetChartInstance.destroy();
 
   const ctx1 = document.getElementById("loanChart").getContext("2d");
   const ctx2 = document.getElementById("offsetChart").getContext("2d");
 
+  // --- Chart 1: Loan Balance Comparison ---
   window.loanChartInstance = new Chart(ctx1, {
     type: "line",
     data: {
-      labels: yearsArray,
+      labels: baseline.years,
       datasets: [
         {
-          label: "Principal Balance (%)",
-          data: principalData,
-          borderWidth: 2,
+          label: "Original Loan (Min Repayments)",
+          data: baseline.balances,
           borderColor: "blue",
+          borderWidth: 2,
           fill: false,
         },
         {
-          label: "Interest Balance (%)",
-          data: interestData,
+          label: "With Extra & Offset",
+          data: accelerated.balances,
+          borderColor: "green",
           borderWidth: 2,
-          borderColor: "red",
           fill: false,
         },
       ],
@@ -110,25 +172,31 @@ function renderCharts(years) {
       responsive: true,
       plugins: {
         legend: { position: "top" },
-        title: { display: true, text: "Principal and Interest Balance Over Time" },
+        title: { display: true, text: "Loan Balance Over Time" },
       },
       scales: {
         x: { title: { display: true, text: "Years" } },
-        y: { title: { display: true, text: "Balance (%)" } },
+        y: { title: { display: true, text: "Loan Balance ($)" } },
       },
     },
   });
 
+  // --- Chart 2: Offset Balance Growth ---
+  const years = accelerated.years;
+  const offsetData = years.map(
+    (y, i) => accelerated.balances[0] - accelerated.balances[i]
+  ); // placeholder for visualization
+
   window.offsetChartInstance = new Chart(ctx2, {
     type: "line",
     data: {
-      labels: yearsArray,
+      labels: years,
       datasets: [
         {
           label: "Offset Balance ($)",
           data: offsetData,
           borderWidth: 2,
-          borderColor: "green",
+          borderColor: "orange",
           fill: false,
         },
       ],
@@ -152,7 +220,7 @@ function renderCharts(years) {
   if (!window.Chart) {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/chart.js";
-    script.onload = calculateAndRender; // auto-run when ready
+    script.onload = calculateAndRender;
     document.head.appendChild(script);
   } else {
     calculateAndRender();
