@@ -3,7 +3,7 @@
    ============================== */
 :root {
   /* Fonts & sizing */
-  --font-family: "Bebas Neue", 'Inter', system-ui, sans-serif;
+  --font-family: "Karla", 'Inter', system-ui, sans-serif;
   --font-size-base: 16px;
   --border-radius: 12px;
   --gap: 1rem;
@@ -55,12 +55,18 @@ body {
   padding: 1rem;
 }
 
+.body-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 /* ==============================
    Header
    ============================== */
 header {
   text-align: center;
   padding: 2rem 1rem 1rem;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 h1 {
@@ -69,28 +75,47 @@ h1 {
   color: var(--color-primary);
 }
 
+
+h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--color-primary);
+}
 /* ==============================
-   Form Sections
+   Form Sections - Input Boxes
    ============================== */
 section {
   margin-bottom: 1.5rem;
 }
 
-/* Each input card */
+.input-row {
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+}
+
 .input-box {
   background: var(--color-surface);
   border-radius: var(--border-radius);
   padding: 1rem;
   box-shadow: 0 4px 10px var(--color-shadow);
-  margin-bottom: var(--gap);
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  /* Flexible width: grow, shrink, minimum width */
+  flex: 1 1 250px;
+  min-width: 250px;
+  margin-bottom: var(--gap);
 }
 
 .input-box label {
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
 }
 
 .input-box input,
@@ -101,6 +126,8 @@ section {
   border: 1px solid var(--color-input-border);
   background: var(--color-input-bg);
   color: var(--color-text);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .input-box input:focus,
@@ -120,7 +147,6 @@ section {
 }
 
 .summary-grid p {
-  flex: 1 1 200px;
   background: var(--color-surface);
   border-radius: var(--border-radius);
   padding: 1rem;
@@ -131,6 +157,10 @@ section {
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  /* Flexible width: grow, shrink, minimum width */
+  flex: 1 1 200px;
+  min-width: 200px;
 }
 
 .summary-grid p strong {
@@ -150,7 +180,7 @@ section {
 }
 
 .chart-box {
-  flex: 1 1 100%;
+  flex: 1 1 300px;
   background: var(--color-surface);
   padding: 1rem;
   border-radius: var(--border-radius);

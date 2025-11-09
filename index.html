@@ -7,9 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="globals.css" />
 </head>
 <body>
+    <div class="body-inner">
     <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌞</button>
   <header>
     <h1>Mortgage Calculator</h1>
@@ -52,17 +54,17 @@
     <h2>Extra Contributions</h2>
     <div class="input-row">
       <div class="input-box">
-        <label>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)
+        <label><span>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)</span>
           <input type="number" id="extraRepayment" value="0">
         </label>
       </div>
       <div class="input-box">
-        <label>Initial Offset Balance ($)
+        <label><span>Initial Offset Balance ($)</span>
           <input type="number" id="initialOffset" value="0">
         </label>
       </div>
       <div class="input-box">
-        <label>Offset Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)
+        <label><span>Offset Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
           <input type="number" id="offsetContribution" value="0">
         </label>
       </div>
@@ -98,5 +100,6 @@
   </section>
 
   <script src="main.js"></script>
+  </div>
 </body>
 </html>
