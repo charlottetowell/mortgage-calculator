@@ -6,13 +6,12 @@
   <title>Mortgage Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="globals.css" />
 </head>
 <body class="dark-mode">
-    <div class="body-inner">
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+<div class="body-inner">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
   <header>
     <h1>🏠 Mortgage Calculator 💸</h1>
   </header>
@@ -54,18 +53,38 @@
     <h2>Extra Contributions</h2>
     <div class="input-row">
       <div class="input-box">
-        <label><span>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)</span>
+        <label>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)
           <input type="number" id="extraRepayment" value="0">
         </label>
       </div>
       <div class="input-box">
-        <label><span>Initial Offset Balance ($)</span>
-          <input type="number" id="initialOffset" value="0">
+        <label>Joint Offset Initial ($)
+          <input type="number" id="jointOffsetInitial" value="0">
         </label>
       </div>
       <div class="input-box">
-        <label><span>Offset Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
-          <input type="number" id="offsetContribution" value="0">
+        <label>Joint Offset Contribution per <span id="offsetFrequencyLabel">weekly</span> ($)
+          <input type="number" id="jointOffsetContribution" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Loan Holder 1 Initial Offset ($)
+          <input type="number" id="holder1OffsetInitial" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Loan Holder 1 Contribution per <span id="offsetFrequencyLabel">weekly</span> ($)
+          <input type="number" id="holder1OffsetContribution" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Loan Holder 2 Initial Offset ($)
+          <input type="number" id="holder2OffsetInitial" value="0">
+        </label>
+      </div>
+      <div class="input-box">
+        <label>Loan Holder 2 Contribution per <span id="offsetFrequencyLabel">weekly</span> ($)
+          <input type="number" id="holder2OffsetContribution" value="0">
         </label>
       </div>
     </div>
@@ -75,10 +94,12 @@
   <section id="summary" class="summary-box">
     <h2>Summary</h2>
     <div class="summary-grid">
-      <p><strong>Total frequent contributions:</strong><span><span id="totalContributions">$0</span></span></p>
-      <p><strong>Total repayments:</strong><span><span id="totalRepayments">$0</span> (Total interest: <span id="totalInterest">$0</span>)</span></p>
-      <p><strong>Extra + Offset savings:</strong><span><span id="savings">$0</span></span></p>
-      <p><strong>Loan paid off in:</strong><span><span id="loanDuration">0 years</span> (Saved: <span id="yearsSaved">0</span>)</span></p>
+      <p><strong>Total Frequent Contributions:</strong><span id="totalContributions">$0</span></p>
+      <p><strong>Joint Frequent Contributions:</strong><span id="jointContributions">$0</span></p>
+      <p><strong>Per Loan Holder Contributions:</strong><span id="perHolderContributions">$0</span></p>
+      <p><strong>Total Repayments:</strong><span id="totalRepayments">$0</span> (Interest: <span id="totalInterest">$0</span>)</p>
+      <p><strong>Extra + Offset Savings:</strong><span id="savings">$0</span></p>
+      <p><strong>Loan Paid Off In:</strong><span id="loanDuration">0 years</span> (Saved: <span id="yearsSaved">0</span>)</p>
     </div>
   </section>
 
@@ -91,13 +112,13 @@
         <canvas id="loanChart"></canvas>
       </div>
       <div class="chart-box">
-        <h3>Offset Balance Over Time</h3>
+        <h3>Offset Balance Over Time (Stacked)</h3>
         <canvas id="offsetChart"></canvas>
       </div>
     </div>
   </section>
 
   <script src="main.js"></script>
-  </div>
+</div>
 </body>
 </html>
