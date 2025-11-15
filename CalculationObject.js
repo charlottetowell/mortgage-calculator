@@ -44,50 +44,54 @@ class CalculationObject extends HTMLElement {
   render() {
     if (this.type === 'loan') {
       this.shadowRoot.innerHTML = `
-        <style>
-          .card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #fff; }
-          .card-title { font-weight: bold; margin-bottom: 8px; }
-          .input-row { margin-bottom: 8px; }
-          .holders-list { margin-top: 8px; }
-        </style>
+        <link rel="stylesheet" href="globals.css">
+        <link rel="stylesheet" href="CalculationObject.css">
         <div class="card">
           <div class="card-title">${this.title}</div>
-          <div class="input-row">
-            <label>Amount ($): <input type="number" min="0" value="${this.inputs.amount}" /></label>
-          </div>
-          <div class="input-row">
-            <label>Loan Term (yrs): <input type="number" min="1" value="${this.inputs.term}" /></label>
-          </div>
-          <div class="input-row">
-            <label>Repayment Frequency:
-              <select>
-                <option value="quarterly">Quarterly</option>
-                <option value="monthly" selected>Monthly</option>
-                <option value="fortnightly">Fortnightly</option>
-                <option value="weekly">Weekly</option>
-              </select>
-            </label>
-          </div>
-          <div class="input-row">
-            <label>Interest Rate p.a. (%): <input type="number" min="0" step="0.01" value="${this.inputs.interest}" /></label>
-          </div>
-          <div class="holders-list">
-            <div>Select Loan Holders:</div>
-            ${this.loanHolders.map(holder => `
-              <label>
-                <input type="checkbox" value="${holder.name}" ${this.inputs.holders.includes(holder.name) ? 'checked' : ''} />
-                ${holder.name}
-              </label>
-            `).join('')}
+          <div class="card-content" style="--card-bg: var(--loanColour);">
+            <div class="inputs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+              <div class="input-group">
+                <label for="amount">Amount ($):</label>
+                <input id="amount" type="number" min="0" value="${this.inputs.amount}" />
+              </div>
+              <div class="input-group">
+                <label for="term">Loan Term (yrs):</label>
+                <input id="term" type="number" min="1" value="${this.inputs.term}" />
+              </div>
+              <div class="input-group">
+                <label for="frequency">Repayment Frequency:</label>
+                <select id="frequency">
+                  <option value="quarterly" ${this.inputs.frequency === 'quarterly' ? 'selected' : ''}>Quarterly</option>
+                  <option value="monthly" ${this.inputs.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
+                  <option value="fortnightly" ${this.inputs.frequency === 'fortnightly' ? 'selected' : ''}>Fortnightly</option>
+                  <option value="weekly" ${this.inputs.frequency === 'weekly' ? 'selected' : ''}>Weekly</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="interest">Interest Rate p.a. (%):</label>
+                <input id="interest" type="number" min="0" step="0.01" value="${this.inputs.interest}" />
+              </div>
+            </div>
+            <div class="holders-list" style="margin-top:2rem;">
+              <div style="font-weight:600; margin-bottom:0.7rem;">Select Loan Holders:</div>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                ${this.loanHolders.map(holder => `
+                  <label style="display:flex; align-items:center; font-size:2rem;">
+                    <input type="checkbox" value="${holder.name}" ${this.inputs.holders.includes(holder.name) ? 'checked' : ''} />
+                    ${holder.name}
+                  </label>
+                `).join('')}
+              </div>
+            </div>
           </div>
         </div>
       `;
       // Add event listeners
       const root = this.shadowRoot;
-      root.querySelector('input[type="number"][min="0"]').oninput = e => this.handleInputChange('amount', e.target.value);
-      root.querySelector('input[type="number"][min="1"]').oninput = e => this.handleInputChange('term', e.target.value);
-      root.querySelector('select').onchange = e => this.handleInputChange('frequency', e.target.value);
-      root.querySelector('input[type="number"][step="0.01"]').oninput = e => this.handleInputChange('interest', e.target.value);
+      root.getElementById('amount').oninput = e => this.handleInputChange('amount', e.target.value);
+      root.getElementById('term').oninput = e => this.handleInputChange('term', e.target.value);
+      root.getElementById('frequency').onchange = e => this.handleInputChange('frequency', e.target.value);
+      root.getElementById('interest').oninput = e => this.handleInputChange('interest', e.target.value);
       root.querySelectorAll('.holders-list input[type="checkbox"]').forEach(el => {
         el.onchange = e => this.handleHolderChange(el.value, el.checked);
       });
