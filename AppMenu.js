@@ -46,12 +46,11 @@ class AppMenu extends HTMLElement {
   }
 
   goToMenu(item) {
-    // Update search param 'menu' in URL
-    const url = new URL(window.location);
-    url.searchParams.set('menu', item.destination);
-    window.history.replaceState({}, '', url);
-    this.render();
-    console.log('Go to menu:', item.title);
+  // Update search param 'menu' in URL and reload page
+  const url = new URL(window.location);
+  url.searchParams.set('menu', item.destination);
+  window.location.href = url;
+  // No need to call render or log, as page will reload
   }
 
   render() {

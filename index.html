@@ -12,12 +12,34 @@
         <!-- Global Styles -->
         <link rel="stylesheet" href="globals.css">
 
-        <!-- Custom Elements -->
-        <script src="AppMenu.js" type="module"></script>
+    <!-- Custom Elements -->
+    <script src="AppMenu.js" type="module"></script>
+    <script src="AppSettings.js" type="module"></script>
     </head>
-    <body>
-        <app-menu id="mainMenu" title="<span style='color:var(--loanColour)'>Finance</span><span style='color:var(--savingsColour)'>Calculator</span>"
-            data-items='[{"title":"💰 Financials","destination":"financials"},{"title":"📈 Reports","destination":"reports"},{"title":"⚙️ Settings","destination":"settings"}]'>
-        </app-menu>
-    </body>
+        <body>
+                <app-menu id="mainMenu" title="<span style='color:var(--loanColour)'>Finance</span><span style='color:var(--savingsColour)'>Calculator</span>"
+                        data-items='[{"title":"💰 Financials","destination":"financials"},{"title":"📈 Reports","destination":"reports"},{"title":"⚙️ Settings","destination":"settings"}]'>
+                </app-menu>
+                <div id="content"></div>
+                <script>
+                    function renderContent() {
+                        const url = new URL(window.location);
+                        const menu = url.searchParams.get('menu') || 'financials';
+                        const contentDiv = document.getElementById('content');
+                        let html = '';
+                        if (menu === 'financials') {
+                            html = `<div class="financials">Financials content goes here.</div>`;
+                        } else if (menu === 'reports') {
+                            html = `<div class="reports">Reports content goes here.</div>`;
+                        } else if (menu === 'settings') {
+                            html = `<app-settings></app-settings>`;
+                        } else {
+                            html = `<div>Unknown menu option.</div>`;
+                        }
+                        contentDiv.innerHTML = html;
+                    }
+                    window.addEventListener('popstate', renderContent);
+                    window.addEventListener('DOMContentLoaded', renderContent);
+                </script>
+        </body>
 </html>
