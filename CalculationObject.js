@@ -49,17 +49,17 @@ class CalculationObject extends HTMLElement {
         <div class="card">
           <div class="card-title">${this.title}</div>
           <div class="card-content" style="--card-bg: var(--loanColour);">
-            <div class="inputs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="inputs-grid">
               <div class="input-group">
-                <label for="amount">Amount ($):</label>
+                <label for="amount" class="card-input-label">Amount ($):</label>
                 <input id="amount" type="number" min="0" value="${this.inputs.amount}" />
               </div>
               <div class="input-group">
-                <label for="term">Loan Term (yrs):</label>
+                <label for="term" class="card-input-label">Loan Term (yrs):</label>
                 <input id="term" type="number" min="1" value="${this.inputs.term}" />
               </div>
               <div class="input-group">
-                <label for="frequency">Repayment Frequency:</label>
+                <label for="frequency" class="card-input-label">Repayment Frequency:</label>
                 <select id="frequency">
                   <option value="quarterly" ${this.inputs.frequency === 'quarterly' ? 'selected' : ''}>Quarterly</option>
                   <option value="monthly" ${this.inputs.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
@@ -68,15 +68,15 @@ class CalculationObject extends HTMLElement {
                 </select>
               </div>
               <div class="input-group">
-                <label for="interest">Interest Rate p.a. (%):</label>
+                <label for="interest" class="card-input-label">Interest Rate p.a. (%):</label>
                 <input id="interest" type="number" min="0" step="0.01" value="${this.inputs.interest}" />
               </div>
             </div>
-            <div class="holders-list" style="margin-top:2rem;">
-              <div style="font-weight:600; margin-bottom:0.7rem;">Select Loan Holders:</div>
-              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+            <div class="holders-list">
+              <div class="holders-list-label">Select Loan Holders:</div>
+              <div class="holders-list-items">
                 ${this.loanHolders.map(holder => `
-                  <label style="display:flex; align-items:center; font-size:2rem;">
+                  <label>
                     <input type="checkbox" value="${holder.name}" ${this.inputs.holders.includes(holder.name) ? 'checked' : ''} />
                     ${holder.name}
                   </label>
