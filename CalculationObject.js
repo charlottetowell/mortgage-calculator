@@ -14,6 +14,38 @@ class CalculationObject extends HTMLElement {
     };
   }
 
+  // Get unique id for this calculation object
+  getObjectId() {
+    if (!this.parentElement) return `${this.type}-0`;
+    const siblings = Array.from(this.parentElement.querySelectorAll('calculation-object[type="' + this.type + '"]'));
+    const idx = siblings.indexOf(this);
+    return `${this.type}-${idx >= 0 ? idx : 0}`;
+  }
+
+  // Save calculation object data to localStorage
+  saveToLocalStorage() {
+    const id = this.getObjectId();
+    const obj = {
+      type: this.type,
+      id,
+      data: { ...this.inputs }
+    };
+    let stored = localStorage.getItem('calculationObjects');
+    let arr = [];
+    if (stored) {
+      try {
+        arr = JSON.parse(stored);
+      } catch (e) {}
+    }
+    const idx = arr.findIndex(o => o.id === id);
+    if (idx >= 0) {
+      arr[idx] = obj;
+    } else {
+      arr.push(obj);
+    }
+    localStorage.setItem('calculationObjects', JSON.stringify(arr));
+  }
+
   connectedCallback() {
     // Load enabled loan holders from localStorage
     const stored = localStorage.getItem('loanHolders');
@@ -29,6 +61,7 @@ class CalculationObject extends HTMLElement {
 
   handleInputChange(field, value) {
     this.inputs[field] = value;
+    this.saveToLocalStorage();
   }
 
   handleHolderChange(name, checked) {
@@ -39,6 +72,7 @@ class CalculationObject extends HTMLElement {
     } else {
       this.inputs.holders = this.inputs.holders.filter(h => h !== name);
     }
+    this.saveToLocalStorage();
   }
 
   render() {
