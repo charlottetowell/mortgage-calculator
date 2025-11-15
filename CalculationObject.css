@@ -28,3 +28,8 @@
 .financials-header button#addSavings {
     background: var(--savingsColour);
 }
+.financials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}

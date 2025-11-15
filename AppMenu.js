@@ -77,7 +77,6 @@ class AppMenu extends HTMLElement {
           </a>
         </div>
       </div>
-      <div class="menu-overlay"></div>
     ` : '';
 
     this.shadowRoot.innerHTML = `
