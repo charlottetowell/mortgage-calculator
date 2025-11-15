@@ -69,7 +69,7 @@ class CalculationObject extends HTMLElement {
           this.title = obj.data.title || this.title;
           this.inputs = { ...this.inputs, ...obj.data };
         }
-      } catch (e) {}
+      } catch (e) {console.error(e);}
     }
     this.render();
   }
@@ -195,7 +195,21 @@ class Financials extends HTMLElement {
   }
 
   connectedCallback() {
-    this.calculations = [   ];
+    // Load calculations from localStorage if available
+    const storedCalcs = localStorage.getItem('calculationObjects');
+    if (storedCalcs) {
+      try {
+        const arr = JSON.parse(storedCalcs);
+        this.calculations = arr.map(obj => ({
+          title: obj.data.title || obj.title || '',
+          type: obj.type || 'loan'
+        }));
+      } catch (e) {
+        this.calculations = [];
+      }
+    } else {
+      this.calculations = [];
+    }
     this.render();
   }
 
