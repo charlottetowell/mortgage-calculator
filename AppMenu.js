@@ -74,7 +74,6 @@ class AppMenu extends HTMLElement {
           <span></span>
         </div>
         <div class="title">
-          ${this.logo ? `<img src="${this.logo}" class="logo" alt="logo">` : ''}
           ${this.title}
         </div>
       </div>

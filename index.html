@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Finance Calculator</title>
-  <script src="AppMenu.js" type="module"></script>
-  <link rel="stylesheet" href="globals.css">
-</head>
-<body>
-  <app-menu id="mainMenu" title="Finance Calculator"
-    data-items='[{"title":"Financials","destination":"/financials"},{"title":"Reports","destination":"/reports"},{"title":"Settings","destination":"/settings"}]'>
-  </app-menu>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Finance Calculator</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+        <!-- Global Styles -->
+        <link rel="stylesheet" href="globals.css">
+
+        <!-- Custom Elements -->
+        <script src="AppMenu.js" type="module"></script>
+    </head>
+    <body>
+        <app-menu id="mainMenu" title="<span style='color:var(--loanColour)'>Finance</span><span style='color:var(--savingsColour)'>Calculator</span>"
+            data-items='[{"title":"Financials","destination":"/financials"},{"title":"Reports","destination":"/reports"},{"title":"Settings","destination":"/settings"}]'>
+        </app-menu>
+    </body>
 </html>

@@ -24,38 +24,26 @@
   border: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.8rem;
 }
 .hamburger span {
   display: block;
-  width: 32px;
-  height: 4px;
+  width: 6rem;
+  height: 1rem;
   background: var(--savingsColour);
-  border-radius: 2px;
+  border-radius: 1rem;
   transition: 0.3s;
 }
-.logo-text {
+.title {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  padding: 0.5rem 1.5rem;
   font-family: var(--headingFont);
   text-align: right;
-}
-.logo-finance {
-  color: var(--loanColour);
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-  line-height: 1.1;
-}
-.logo-calculator {
-  color: var(--savingsColour);
-  font-size: 1.1rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-  line-height: 1.1;
+  font-weight: 600;
+  font-size: 4rem;
+  line-height: 0.8;
 }
 .menu-list {
   background: var(--whiteColour);
