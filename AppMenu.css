@@ -1,0 +1,107 @@
+
+:host {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  z-index: 1000;
+  display: block;
+}
+.menu-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  background: var(--whiteColour);
+  color: var(--savingsColour);
+  padding: 2rem;
+}
+.hamburger {
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background: var(--whiteColour);
+  color: var(--savingsColour);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 32px;
+  height: 4px;
+  background: var(--savingsColour);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0.5rem 1.5rem;
+  font-family: var(--headingFont);
+  text-align: right;
+}
+.logo-finance {
+  color: var(--loanColour);
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+.logo-calculator {
+  color: var(--savingsColour);
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+.menu-list {
+  background: var(--whiteColour);
+  color: var(--savingsColour);
+  position: absolute;
+  left: 0;
+  top: 56px;
+  width: 100vw;
+  animation: fadeIn 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.menu-item {
+  padding: 0.7rem 2rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-family: var(--bodyFont);
+  background: none;
+  border: none;
+  text-align: left;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+.credit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem 2rem 0.5rem 2rem;
+  font-size: 0.95rem;
+  color: var(--savingsColour);
+}
+.credit a {
+  color: var(--savingsColour);
+  text-decoration: none;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.github-logo {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}

@@ -1,0 +1,13 @@
+:root {
+    --loanColour: #76c69a;
+    --loanOffsetColour:  #89d4ab;
+    --savingsColour: #6b6fba;
+    --whiteColour: #f2f1ef;
+    --backgroundColour: #ebe8e2;
+    --blackColour: #070818;
+
+    --headingFont: 'Istok Web', sans-serif;
+    --bodyFont: 'Inria Sans', sans-serif;
+
+    background: var(--backgroundColour);
+}
