@@ -58,15 +58,17 @@ class AppSettings extends HTMLElement {
     const settingsHtml = this.settings.map(setting => {
       if (setting.type === 'configure_loan_holders') {
         return `
-          <div class="setting-group">
-            <div class="setting-title">${setting.title}</div>
-            <div class="loan-holders">
-              ${this.loanHolders.map((holder, idx) => `
-                <label class="loan-holder-row">
-                  <input type="checkbox" ${holder.enabled ? 'checked' : ''} data-idx="${idx}" />
-                  <input type="text" value="${holder.name}" data-idx="${idx}" />
-                </label>
-              `).join('')}
+          <div class="card">
+            <div class="card-title">${setting.title}</div>
+            <div class="card-content" style="--card-bg: var(--loanColour);">
+              <div class="loan-holders">
+                ${this.loanHolders.map((holder, idx) => `
+                  <label class="loan-holder-row">
+                    <input type="checkbox" ${holder.enabled ? 'checked' : ''} data-idx="${idx}" />
+                    <input type="text" value="${holder.name}" data-idx="${idx}" />
+                  </label>
+                `).join('')}
+              </div>
             </div>
           </div>
         `;
@@ -75,13 +77,8 @@ class AppSettings extends HTMLElement {
     }).join('');
 
     this.shadowRoot.innerHTML = `
-      <style>
-        .setting-group { margin-bottom: 1.5em; }
-        .setting-title { font-weight: bold; margin-bottom: 0.5em; }
-        .loan-holders { display: flex; flex-direction: column; gap: 0.5em; }
-        .loan-holder-row { display: flex; align-items: center; gap: 0.5em; }
-        input[type="text"] { padding: 0.3em 0.6em; border-radius: 4px; border: 1px solid #ccc; }
-      </style>
+      <link rel="stylesheet" href="globals.css">
+      <link rel="stylesheet" href="AppSettings.css">
       <div class="settings-list">
         ${settingsHtml}
       </div>
