@@ -1,0 +1,30 @@
+.financials-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.financials-header button {
+    width: 50%;
+    color: #fff;
+    border: none;
+    border-radius: 0.7rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 2.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, transform 0.15s;
+}
+
+.financials-header button:active {
+    transform: scale(0.96);
+}
+
+.financials-header button#addLoan {
+    background: var(--loanColour);
+}
+
+.financials-header button#addSavings {
+    background: var(--savingsColour);
+}

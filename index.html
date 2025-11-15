@@ -15,6 +15,7 @@
     <!-- Custom Elements -->
     <script src="AppMenu.js" type="module"></script>
     <script src="AppSettings.js" type="module"></script>
+        <script src="CalculationObject.js" type="module"></script>
     </head>
         <body>
                 <app-menu id="mainMenu" title="<span style='color:var(--loanColour)'>Finance</span><span style='color:var(--savingsColour)'>Calculator</span>"
@@ -28,7 +29,7 @@
                         const contentDiv = document.getElementById('content');
                         let html = '';
                         if (menu === 'financials') {
-                            html = `<div class="financials">Financials content goes here.</div>`;
+                           html = `<financials-list></financials-list>`;
                         } else if (menu === 'reports') {
                             html = `<div class="reports">Reports content goes here.</div>`;
                         } else if (menu === 'settings') {
