@@ -39,12 +39,12 @@ class AppSettings extends HTMLElement {
   handleInputChange(index, value) {
     this.loanHolders[index].name = value;
     this.saveToLocalStorage();
-    // Debounce sessionStorage update
+    // Debounce sessionStorage update and render
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       this.saveToSessionStorage();
-    }, 400);
-    this.render();
+      this.render();
+    }, 5000);
   }
 
   handleCheckboxChange(index, checked) {
