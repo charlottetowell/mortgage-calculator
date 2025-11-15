@@ -53,6 +53,7 @@
   animation: fadeIn 0.2s;
   display: flex;
   flex-direction: column;
+  padding: 0 0 2rem 0;
 }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
@@ -69,6 +70,10 @@
   transition: background 0.2s;
   display: flex;
   align-items: center;
+}
+
+.menu-item.current {
+    font-weight: 1000;
 }
 
 .credit {
