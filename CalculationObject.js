@@ -49,13 +49,27 @@ class CalculationObject extends HTMLElement {
 
   connectedCallback() {
     // Load enabled loan holders from localStorage
-    const stored = localStorage.getItem('loanHolders');
-    if (stored) {
+    const storedHolders = localStorage.getItem('loanHolders');
+    if (storedHolders) {
       try {
-        this.loanHolders = JSON.parse(stored).filter(h => h.enabled);
+        this.loanHolders = JSON.parse(storedHolders).filter(h => h.enabled);
       } catch (e) {
         this.loanHolders = [];
       }
+    }
+    // Load calculation object data from localStorage
+    const storedCalcs = localStorage.getItem('calculationObjects');
+    if (storedCalcs) {
+      try {
+        const arr = JSON.parse(storedCalcs);
+        const id = this.getObjectId();
+        const obj = arr.find(o => o.id === id);
+        if (obj && obj.data) {
+          // Prepopulate title and inputs
+          this.title = obj.data.title || this.title;
+          this.inputs = { ...this.inputs, ...obj.data };
+        }
+      } catch (e) {}
     }
     this.render();
   }

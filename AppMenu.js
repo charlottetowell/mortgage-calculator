@@ -4,7 +4,6 @@ class AppMenu extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.menuOpen = false;
     this.menuItems = [];
-    this.title = 'Finance Calculator';
     this.logo = '';
     this.credit = {
       github: 'https://github.com/charlottetowell',
@@ -13,13 +12,15 @@ class AppMenu extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['title', 'logo'];
+    return ['logo'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'title') this.title = newValue;
     if (name === 'logo') this.logo = newValue;
-    this.render();
+    // Only call render if the value actually changed
+    if (oldValue !== newValue) {
+      this.render();
+    }
   }
 
   set items(val) {
@@ -88,7 +89,7 @@ class AppMenu extends HTMLElement {
           <span></span>
         </div>
         <div class="title">
-          ${this.title}
+          <span style="color:var(--loanColour)">Finance</span><span style="color:var(--savingsColour)"> Calculator</span>
         </div>
       </div>
       ${menuList}
