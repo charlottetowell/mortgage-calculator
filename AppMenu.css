@@ -1,8 +1,6 @@
-
 :host {
   position: sticky;
   top: 0;
-  width: 100vw;
   z-index: 1000;
   display: block;
 }
@@ -14,6 +12,7 @@
   background: var(--whiteColour);
   color: var(--savingsColour);
   padding: 2rem;
+  z-index: 1000;
 }
 .hamburger {
   cursor: pointer;
@@ -75,7 +74,11 @@
 .menu-item.current {
     font-weight: 1000;
 }
-
+.menu-overlay {
+  background: rgba(0,0,0,0.2);
+  height: 100vh;
+  pointer-events: none;
+}
 .credit {
   display: flex;
   justify-content: flex-end;
