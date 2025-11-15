@@ -58,7 +58,12 @@ class AppMenu extends HTMLElement {
 
     // Get current menu from search param
     const url = new URL(window.location);
-    const currentMenu = url.searchParams.get('menu');
+    let currentMenu = url.searchParams.get('menu');
+    if (!currentMenu && this.menuItems.length > 0) {
+      currentMenu = this.menuItems[0].destination;
+      url.searchParams.set('menu', currentMenu);
+      window.history.replaceState({}, '', url);
+    }
 
     const menuList = this.menuOpen ? `
       <div class="menu-list">
