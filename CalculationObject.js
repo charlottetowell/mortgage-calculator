@@ -12,6 +12,7 @@ class CalculationObject extends HTMLElement {
       interest: '',
       holders: []
     };
+    this.editingTitle = false;
   }
 
   // Get unique id for this calculation object
@@ -28,7 +29,7 @@ class CalculationObject extends HTMLElement {
     const obj = {
       type: this.type,
       id,
-      data: { ...this.inputs }
+      data: { title: this.title, ...this.inputs }
     };
     let stored = localStorage.getItem('calculationObjects');
     let arr = [];
@@ -75,13 +76,38 @@ class CalculationObject extends HTMLElement {
     this.saveToLocalStorage();
   }
 
+  handleTitleEdit() {
+    this.editingTitle = true;
+    this.render();
+    const input = this.shadowRoot.getElementById('edit-title-input');
+    if (input) {
+      input.focus();
+      input.select();
+      input.onblur = () => {
+        this.title = input.value.trim() || this.title;
+        this.editingTitle = false;
+        this.saveToLocalStorage();
+        this.render();
+      };
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          input.blur();
+        }
+      };
+    }
+  }
+
   render() {
     if (this.type === 'loan') {
       this.shadowRoot.innerHTML = `
         <link rel="stylesheet" href="globals.css">
         <link rel="stylesheet" href="CalculationObject.css">
         <div class="card">
-          <div class="card-title">${this.title}</div>
+          <div class="card-title" style="cursor:pointer;">
+            ${this.editingTitle
+              ? `<input id="edit-title-input" type="text" value="${this.title}" style="width:100%;background:var(--whiteColour);color:var(--blackColour);font-family:var(--headingFont);font-size:3rem;font-weight:800;border:none;padding:0.5rem 2rem;box-sizing:border-box;border-radius:1rem;" />`
+              : `<span id="title-text">${this.title}</span>`}
+          </div>
           <div class="card-content" style="--card-bg: var(--loanColour);">
             <div class="inputs-grid">
               <div class="input-group">
@@ -122,6 +148,17 @@ class CalculationObject extends HTMLElement {
       `;
       // Add event listeners
       const root = this.shadowRoot;
+      if (!this.editingTitle) {
+        const titleText = root.getElementById('title-text');
+        if (titleText) {
+          titleText.onclick = () => this.handleTitleEdit();
+        }
+        // Also allow clicking anywhere on card-title
+        const cardTitle = root.querySelector('.card-title');
+        if (cardTitle) {
+          cardTitle.onclick = () => this.handleTitleEdit();
+        }
+      }
       root.getElementById('amount').oninput = e => this.handleInputChange('amount', e.target.value);
       root.getElementById('term').oninput = e => this.handleInputChange('term', e.target.value);
       root.getElementById('frequency').onchange = e => this.handleInputChange('frequency', e.target.value);
