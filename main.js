@@ -201,14 +201,40 @@ function renderCharts(baseline, accelerated){
     const acceleratedData = labels.map(y=>sampleAtYear(accelerated.years, accelerated.balances, y));
     const offsetsData = [0,1,2].map(idx=>labels.map(y=>sampleAtYear(accelerated.years, accelerated.offsetBalances.map(arr=>arr[idx]), y)));
 
+    // Get chart colors from CSS
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const originalColor = rootStyles.getPropertyValue('--color-chart-original').trim();
+    const acceleratedColor = rootStyles.getPropertyValue('--color-chart-accelerated').trim();
+    const holder1Color = rootStyles.getPropertyValue('--color-chart-holder1').trim();
+    const holder2Color = rootStyles.getPropertyValue('--color-chart-holder2').trim();
+
+    const originalRgb = hexToRgb(originalColor);
+    const acceleratedRgb = hexToRgb(acceleratedColor);
+    const holder1Rgb = hexToRgb(holder1Color);
+    const holder2Rgb = hexToRgb(holder2Color);
+
+    const originalBg = `rgba(${originalRgb.r}, ${originalRgb.g}, ${originalRgb.b}, 0.15)`;
+    const acceleratedBg = `rgba(${acceleratedRgb.r}, ${acceleratedRgb.g}, ${acceleratedRgb.b}, 0.15)`;
+    const holder1Bg = `rgba(${holder1Rgb.r}, ${holder1Rgb.g}, ${holder1Rgb.b}, 0.15)`;
+    const holder2Bg = `rgba(${holder2Rgb.r}, ${holder2Rgb.g}, ${holder2Rgb.b}, 0.15)`;
+
     // Loan Chart
     window.loanChartInstance = new Chart(ctx1,{
         type:"line",
         data:{
             labels,
             datasets:[
-                {label:"Original Loan", data:baselineData, borderColor:"#6667ab", borderWidth:3, fill:true, backgroundColor:"rgba(102,103,171,0.15)", tension:0.4, pointRadius:0},
-                {label:"With Extra & Offset", data:acceleratedData, borderColor:"#cba6f7", borderWidth:3, fill:true, backgroundColor:"rgba(203,166,247,0.15)", tension:0.4, pointRadius:0}
+                {label:"Original Loan", data:baselineData, borderColor: originalColor, borderWidth:3, fill:true, backgroundColor: originalBg, tension:0.4, pointRadius:0},
+                {label:"With Extra & Offset", data:acceleratedData, borderColor: acceleratedColor, borderWidth:3, fill:true, backgroundColor: acceleratedBg, tension:0.4, pointRadius:0}
             ]
         },
         options:{responsive:true, plugins:{legend:{position:"none"}}, scales:{x:{title:{display:false}}, y:{title:{display:false},min:0}}}
@@ -220,9 +246,9 @@ function renderCharts(baseline, accelerated){
         data:{
             labels,
             datasets:[
-                {label:"Joint Offset", data:offsetsData[0], borderColor:"#6667ab", borderWidth:2, fill:true, backgroundColor:"rgba(102,103,171,0.15)", tension:0.4, pointRadius:0},
-                {label:"Loan Holder 1", data:offsetsData[1], borderColor:"#ab6667", borderWidth:2, fill:true, backgroundColor:"rgba(171,102,103,0.15)", tension:0.4, pointRadius:0},
-                {label:"Loan Holder 2", data:offsetsData[2], borderColor:"#66ab67", borderWidth:2, fill:true, backgroundColor:"rgba(102,171,103,0.15)", tension:0.4, pointRadius:0}
+                {label:"Joint Offset", data:offsetsData[0], borderColor: originalColor, borderWidth:2, fill:true, backgroundColor: originalBg, tension:0.4, pointRadius:0},
+                {label:"Loan Holder 1", data:offsetsData[1], borderColor: holder1Color, borderWidth:2, fill:true, backgroundColor: holder1Bg, tension:0.4, pointRadius:0},
+                {label:"Loan Holder 2", data:offsetsData[2], borderColor: holder2Color, borderWidth:2, fill:true, backgroundColor: holder2Bg, tension:0.4, pointRadius:0}
             ]
         },
         options:{responsive:true, plugins:{legend:{position:"top"}}, scales:{x:{title:{display:false}}, y:{title:{display:false},min:0}}}

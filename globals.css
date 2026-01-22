@@ -9,19 +9,6 @@
   --gap: 1rem;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
-  /* Colors: light mode */
-  --color-bg: #f5f6fa;
-  --color-surface: #ffffff;
-  --color-primary: #6667ab;
-  --color-secondary: #cba6f7;
-  --color-text: #222;
-  --color-muted: #666;
-  --color-accent: #007acc;
-  --color-accent-hover: #005fa3;
-  --color-input-bg: #fff;
-  --color-input-border: #ccc;
-  --color-shadow: rgba(0, 0, 0, 0.08);
-
   /* White contrasts */
   --color-forest: #354f52;
   --color-muted-teal: #52796f;
@@ -30,11 +17,14 @@
   /* Black Contrasts */
   --color-leaf: #84a98c;
   --color-lichen: #cad2c5;
+
+  /* Chart Colors */
+  --color-chart-original: var(--color-forest);
+  --color-chart-accelerated: var(--color-lichen);
+  --color-chart-holder1: var(--color-lichen);
+  --color-chart-holder2: var(--color-swamp);
 }
 
-/* ==============================
-   Base Layout
-   ============================== */
 html, body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
@@ -120,6 +110,11 @@ section {
   width: fit-content;
 }
 
+.summary-section .section-title {
+  background: var(--color-lichen);
+  color: #000;
+}
+
 .data-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -130,8 +125,15 @@ section {
 
 .data-grid.inputs {
   background-color: var(--color-muted-teal);
-  border-bottom-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
+  border-radius: var(--border-radius);
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.data-grid.outputs {
+  background-color: var(--color-leaf);
+  border-radius: var(--border-radius);
+  border-top-left-radius: 0;
 }
 
 .input-box {
@@ -267,10 +269,9 @@ section {
 
 .chart-box {
   flex: 1 1 300px;
-  background: var(--color-surface);
+  background: transparent;
   padding: 1rem;
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 10px var(--color-shadow);
 }
 
 canvas {
@@ -278,5 +279,5 @@ canvas {
   height: 300px !important;
   margin-top: 1rem;
   border-radius: var(--border-radius);
-  background: var(--color-surface);
+  background: transparent;
 }
