@@ -21,6 +21,15 @@
   --color-input-bg: #fff;
   --color-input-border: #ccc;
   --color-shadow: rgba(0, 0, 0, 0.08);
+
+  /* White contrasts */
+  --color-forest: #354f52;
+  --color-muted-teal: #354f52;
+  --color-swamp: #8e9e97;
+
+  /* Black Contrasts */
+  --color-leaf: #84a98c;
+  --color-lichen: #cad2c5;
 }
 
 /* ==============================
