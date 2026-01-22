@@ -10,13 +10,6 @@ function formatCurrency(amount) {
     }).format(rounded);
 }
 
-// Dark/Light mode toggle
-const themeToggleBtn = document.getElementById("themeToggle");
-themeToggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    themeToggleBtn.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "🌞";
-});
-
 // --- DOM Elements ---
 const loanAmountEl = document.getElementById("loanAmount");
 const interestRateEl = document.getElementById("interestRate");
@@ -24,7 +17,6 @@ const loanTermEl = document.getElementById("loanTerm");
 const repaymentFrequencyEl = document.getElementById("repaymentFrequency");
 const repaymentResultEl = document.getElementById("repaymentResult");
 
-const extraRepaymentEl = document.getElementById("extraRepayment");
 const jointOffsetInitialEl = document.getElementById("jointOffsetInitial");
 const jointOffsetContributionEl = document.getElementById("jointOffsetContribution");
 const holder1OffsetInitialEl = document.getElementById("holder1OffsetInitial");
@@ -37,7 +29,8 @@ const offsetFrequencyLabel = document.getElementById("offsetFrequencyLabel");
 
 const totalContribEl = document.getElementById("totalContributions");
 const jointContribEl = document.getElementById("jointContributions");
-const perHolderContribEl = document.getElementById("perHolderContributions");
+const holder1ContribEl = document.getElementById("holder1Contrib");
+const holder2ContribEl = document.getElementById("holder2Contrib");
 const totalRepaymentsEl = document.getElementById("totalRepayments");
 const totalInterestEl = document.getElementById("totalInterest");
 const savingsEl = document.getElementById("savings");
@@ -47,7 +40,7 @@ const loanDurationEl = document.getElementById("loanDuration");
 // --- Event listeners ---
 [
     loanAmountEl, interestRateEl, loanTermEl, repaymentFrequencyEl,
-    extraRepaymentEl, jointOffsetInitialEl, jointOffsetContributionEl,
+    jointOffsetInitialEl, jointOffsetContributionEl,
     holder1OffsetInitialEl, holder1OffsetContributionEl,
     holder2OffsetInitialEl, holder2OffsetContributionEl
 ].forEach(el => el.addEventListener("input", calculateAndRender));
@@ -66,8 +59,6 @@ function calculateAndRender() {
     const annualRate = parseFloat(interestRateEl.value)/100;
     const years = parseFloat(loanTermEl.value);
     const frequency = repaymentFrequencyEl.value;
-
-    const extraRepayment = parseFloat(extraRepaymentEl.value)||0;
 
     const jointOffsetInitial = parseFloat(jointOffsetInitialEl.value)||0;
     const jointOffsetContribution = parseFloat(jointOffsetContributionEl.value)||0;
@@ -88,20 +79,20 @@ function calculateAndRender() {
     const totalPayments = years*paymentsPerYear;
 
     const minRepayment = periodicRate===0 ? loanAmount/totalPayments : (loanAmount*periodicRate)/(1-Math.pow(1+periodicRate, -totalPayments));
-    repaymentResultEl.textContent = `Minimum ${frequency} repayment: ${formatCurrency(minRepayment)}`;
+    repaymentResultEl.textContent = `Min. ${frequency} repayment: ${formatCurrency(minRepayment)}`;
 
     const baseline = simulateLoan({principal:loanAmount, rate:periodicRate, repayment:minRepayment, paymentsPerYear});
     const accelerated = simulateLoan({
         principal: loanAmount,
         rate: periodicRate,
-        repayment: minRepayment+extraRepayment,
+        repayment: minRepayment,
         paymentsPerYear,
         offsetInitials: [jointOffsetInitial, holder1Initial, holder2Initial],
         offsetContribs: [jointOffsetContribution, holder1Contribution, holder2Contribution]
     });
 
     // --- Updated Summary Calculations ---
-    const totalPerPeriodContrib = minRepayment + extraRepayment + jointOffsetContribution + holder1Contribution + holder2Contribution;
+    const totalPerPeriodContrib = minRepayment + jointOffsetContribution + holder1Contribution + holder2Contribution;
 
     const jointContrib = minRepayment + jointOffsetContribution;
     const holder1Contrib = (minRepayment + jointOffsetContribution)/2 + holder1Contribution;
@@ -110,9 +101,10 @@ function calculateAndRender() {
     const totalSavings = baseline.totalPaid - accelerated.totalPaid;
     const yearsSaved = Math.max(0, baseline.totalPeriods/paymentsPerYear - accelerated.totalPeriods/paymentsPerYear);
 
-    totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
-    jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency}`;
-    perHolderContribEl.textContent = `${formatCurrency(holder1Contrib)} / ${formatCurrency(holder2Contrib)} per ${frequency}`;
+    totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency.replace("ly","")}`;
+    jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency.replace("ly","")}`;
+    holder1ContribEl.textContent = `${formatCurrency(holder1Contrib)} per ${frequency.replace("ly","")}`;
+    holder2ContribEl.textContent = `${formatCurrency(holder2Contrib)} per ${frequency.replace("ly","")}`;
 
     totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
     totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);
@@ -209,14 +201,40 @@ function renderCharts(baseline, accelerated){
     const acceleratedData = labels.map(y=>sampleAtYear(accelerated.years, accelerated.balances, y));
     const offsetsData = [0,1,2].map(idx=>labels.map(y=>sampleAtYear(accelerated.years, accelerated.offsetBalances.map(arr=>arr[idx]), y)));
 
+    // Get chart colors from CSS
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const originalColor = rootStyles.getPropertyValue('--color-chart-original').trim();
+    const acceleratedColor = rootStyles.getPropertyValue('--color-chart-accelerated').trim();
+    const holder1Color = rootStyles.getPropertyValue('--color-chart-holder1').trim();
+    const holder2Color = rootStyles.getPropertyValue('--color-chart-holder2').trim();
+
+    const originalRgb = hexToRgb(originalColor);
+    const acceleratedRgb = hexToRgb(acceleratedColor);
+    const holder1Rgb = hexToRgb(holder1Color);
+    const holder2Rgb = hexToRgb(holder2Color);
+
+    const originalBg = `rgba(${originalRgb.r}, ${originalRgb.g}, ${originalRgb.b}, 0.15)`;
+    const acceleratedBg = `rgba(${acceleratedRgb.r}, ${acceleratedRgb.g}, ${acceleratedRgb.b}, 0.15)`;
+    const holder1Bg = `rgba(${holder1Rgb.r}, ${holder1Rgb.g}, ${holder1Rgb.b}, 0.15)`;
+    const holder2Bg = `rgba(${holder2Rgb.r}, ${holder2Rgb.g}, ${holder2Rgb.b}, 0.15)`;
+
     // Loan Chart
     window.loanChartInstance = new Chart(ctx1,{
         type:"line",
         data:{
             labels,
             datasets:[
-                {label:"Original Loan", data:baselineData, borderColor:"#6667ab", borderWidth:3, fill:true, backgroundColor:"rgba(102,103,171,0.15)", tension:0.4, pointRadius:0},
-                {label:"With Extra & Offset", data:acceleratedData, borderColor:"#cba6f7", borderWidth:3, fill:true, backgroundColor:"rgba(203,166,247,0.15)", tension:0.4, pointRadius:0}
+                {label:"Original Loan", data:baselineData, borderColor: originalColor, borderWidth:3, fill:true, backgroundColor: originalBg, tension:0.4, pointRadius:0},
+                {label:"With Extra & Offset", data:acceleratedData, borderColor: acceleratedColor, borderWidth:3, fill:true, backgroundColor: acceleratedBg, tension:0.4, pointRadius:0}
             ]
         },
         options:{responsive:true, plugins:{legend:{position:"none"}}, scales:{x:{title:{display:false}}, y:{title:{display:false},min:0}}}
@@ -228,9 +246,9 @@ function renderCharts(baseline, accelerated){
         data:{
             labels,
             datasets:[
-                {label:"Joint Offset", data:offsetsData[0], borderColor:"#6667ab", borderWidth:2, fill:true, backgroundColor:"rgba(102,103,171,0.15)", tension:0.4, pointRadius:0},
-                {label:"Loan Holder 1", data:offsetsData[1], borderColor:"#ab6667", borderWidth:2, fill:true, backgroundColor:"rgba(171,102,103,0.15)", tension:0.4, pointRadius:0},
-                {label:"Loan Holder 2", data:offsetsData[2], borderColor:"#66ab67", borderWidth:2, fill:true, backgroundColor:"rgba(102,171,103,0.15)", tension:0.4, pointRadius:0}
+                {label:"Joint Offset", data:offsetsData[0], borderColor: originalColor, borderWidth:2, fill:true, backgroundColor: originalBg, tension:0.4, pointRadius:0},
+                {label:"Loan Holder 1", data:offsetsData[1], borderColor: holder1Color, borderWidth:2, fill:true, backgroundColor: holder1Bg, tension:0.4, pointRadius:0},
+                {label:"Loan Holder 2", data:offsetsData[2], borderColor: holder2Color, borderWidth:2, fill:true, backgroundColor: holder2Bg, tension:0.4, pointRadius:0}
             ]
         },
         options:{responsive:true, plugins:{legend:{position:"top"}}, scales:{x:{title:{display:false}}, y:{title:{display:false},min:0}}}
