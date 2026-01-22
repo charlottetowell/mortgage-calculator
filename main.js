@@ -10,13 +10,6 @@ function formatCurrency(amount) {
     }).format(rounded);
 }
 
-// Dark/Light mode toggle
-const themeToggleBtn = document.getElementById("themeToggle");
-themeToggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    themeToggleBtn.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "🌞";
-});
-
 // --- DOM Elements ---
 const loanAmountEl = document.getElementById("loanAmount");
 const interestRateEl = document.getElementById("interestRate");
