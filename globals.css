@@ -38,71 +38,106 @@
 html, body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--color-forest);
+  color: #ffffff;
   margin: 0;
   padding: 0;
   line-height: 1.6;
 }
 
 body {
-  padding: 1rem;
+  padding: 0;
 }
 
 .body-inner {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 1rem;
 }
 
 /* ==============================
    Header
    ============================== */
 header {
+  background: var(--color-swamp);
+  color: #ffffff;
   text-align: center;
-  padding: 2rem 1rem 1rem;
+  padding: 2rem 1rem;
   font-family: 'Bebas Neue', sans-serif;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  margin-bottom: 1rem;
 }
 
 h1 {
   margin: 0;
   font-size: 2rem;
-  color: var(--color-primary);
+  color: #ffffff;
 }
 
-
-h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    color: var(--color-primary);
-}
 /* ==============================
-   Form Sections - Input Boxes
+   Info Section
    ============================== */
-section {
-  margin-bottom: 1.5rem;
+.info-section {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
 }
 
-.input-row {
-  display: flex;
+.info-section p {
+  margin: 0;
+}
+
+/* ==============================
+   Data Sections
+   ============================== */
+.data-section {
+  background: var(--color-muted-teal);
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.section-title {
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  background: var(--color-swamp);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--gap);
-  flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
 .input-box {
-  background: var(--color-surface);
-  border-radius: var(--border-radius);
-  padding: 1rem;
-  box-shadow: 0 4px 10px var(--color-shadow);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1 1 250px;
-  min-width: 250px;
+  align-items: flex-start;
 }
 
 .input-box label {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--color-primary);
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -114,9 +149,9 @@ section {
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
   border-radius: var(--border-radius);
-  border: 1px solid var(--color-input-border);
-  background: var(--color-input-bg);
-  color: var(--color-text);
+  border: 1px solid var(--color-lichen);
+  background: var(--color-lichen);
+  color: var(--color-forest);
   width: 100%;
   box-sizing: border-box;
 }
@@ -128,36 +163,69 @@ section {
   box-shadow: 0 0 0 2px rgba(102, 103, 171, 0.2);
 }
 
-/* ==============================
-   Summary Stats - Bubble Cards
-   ============================== */
-.summary-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.summary-grid p {
-  background: var(--color-surface);
+.bottom-right {
+  position: absolute;
+  bottom: -1rem;
+  right: 0;
+  background: var(--color-leaf);
+  color: var(--color-forest);
+  padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
-  padding: 1rem;
-  box-shadow: 0 4px 12px var(--color-shadow);
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  /* Flexible width: grow, shrink, minimum width */
-  flex: 1 1 200px;
-  min-width: 200px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  font-size: 0.9rem;
 }
 
-.summary-grid p strong {
-  display: block;
-  margin-bottom: 0.3rem;
-  color: var(--color-primary);
+/* ==============================
+   Summary Divider
+   ============================== */
+.summary-divider {
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  border-bottom: 2px solid var(--color-swamp);
+  padding-bottom: 0.5rem;
+}
+
+/* ==============================
+   Summary Sections
+   ============================== */
+.summary-section {
+  background: var(--color-leaf);
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.summary-title {
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  background: var(--color-swamp);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+}
+
+.data-display {
+  margin-top: 2rem;
+}
+
+.data-display p {
+  margin: 0.5rem 0;
+  color: var(--color-forest);
+}
+
+.data-display strong {
+  color: var(--color-forest);
 }
 
 /* ==============================
@@ -190,17 +258,25 @@ canvas {
    Responsive
    ============================== */
 @media (max-width: 768px) {
-  .input-row,
+  .data-grid {
+    grid-template-columns: 1fr;
+  }
+
   .chart-container {
     flex-direction: column;
     gap: 0.8rem;
   }
 
-  .summary-grid p {
-    flex: 1 1 100%;
+  .section-title,
+  .summary-title,
+  .bottom-right {
+    position: static;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
   }
 
-  .input-box {
-    flex: 1 1 100%;
+  .data-section,
+  .summary-section {
+    border-radius: var(--border-radius);
   }
 }

@@ -30,7 +30,8 @@ const offsetFrequencyLabel = document.getElementById("offsetFrequencyLabel");
 
 const totalContribEl = document.getElementById("totalContributions");
 const jointContribEl = document.getElementById("jointContributions");
-const perHolderContribEl = document.getElementById("perHolderContributions");
+const holder1ContribEl = document.getElementById("holder1Contrib");
+const holder2ContribEl = document.getElementById("holder2Contrib");
 const totalRepaymentsEl = document.getElementById("totalRepayments");
 const totalInterestEl = document.getElementById("totalInterest");
 const savingsEl = document.getElementById("savings");
@@ -105,7 +106,8 @@ function calculateAndRender() {
 
     totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
     jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency}`;
-    perHolderContribEl.textContent = `${formatCurrency(holder1Contrib)} / ${formatCurrency(holder2Contrib)} per ${frequency}`;
+    holder1ContribEl.textContent = `${formatCurrency(holder1Contrib)} per ${frequency}`;
+    holder2ContribEl.textContent = `${formatCurrency(holder2Contrib)} per ${frequency}`;
 
     totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
     totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);

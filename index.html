@@ -12,26 +12,30 @@
 <body>
 <div class="body-inner">
   <header>
-    <h1>🏠 Mortgage Calculator 💸</h1>
+    <h1>Mortgage<br>Calculator</h1>
   </header>
 
+  <section class="info-section">
+    <p>• Info point 1<br>• Info point 2<br>• Info point 3</p>
+  </section>
+
   <!-- Section 1: Basic Loan Inputs -->
-  <section id="loan-inputs">
-    <h2>Loan Details</h2>
-    <div class="input-row">
+  <section id="loan-inputs" class="data-section">
+    <div class="section-title">Mortgage</div>
+    <div class="data-grid">
       <div class="input-box">
         <label>Loan Amount ($)
           <input type="number" id="loanAmount" value="660000">
         </label>
       </div>
       <div class="input-box">
-        <label>Interest Rate (%)
-          <input type="number" id="interestRate" step="0.01" value="5.49">
+        <label>Loan Term (years)
+          <input type="number" id="loanTerm" value="30">
         </label>
       </div>
       <div class="input-box">
-        <label>Loan Term (years)
-          <input type="number" id="loanTerm" value="30">
+        <label>Interest Rate (%)
+          <input type="number" id="interestRate" step="0.01" value="5.49">
         </label>
       </div>
       <div class="input-box">
@@ -44,7 +48,7 @@
         </label>
       </div>
     </div>
-    <p id="repaymentResult"></p>
+    <div class="bottom-right">Min repayments: <span id="repaymentResult"></span></div>
   </section>
 
   <!-- Section 2: Extra Repayments -->
@@ -60,9 +64,9 @@
   </section>
 
   <!-- Section 3: Joint Offset -->
-  <section id="joint-offset">
-    <h2>Joint Offset Account</h2>
-    <div class="input-row">
+  <section id="joint-offset" class="data-section">
+    <div class="section-title">Joint Offset</div>
+    <div class="data-grid">
       <div class="input-box">
         <label>Initial Balance ($)
           <input type="number" id="jointOffsetInitial" value="0">
@@ -74,59 +78,79 @@
         </label>
       </div>
     </div>
+    <div class="bottom-right">*same freq. as loan</div>
   </section>
 
   <!-- Section 4: Individual Offsets -->
   <section id="individual-offsets">
-    <h2>Loan Holder Offsets</h2>
-    <div class="input-row">
-      <div class="input-box">
-        <label>Loan Holder 1 Initial Offset ($)
-          <input type="number" id="holder1OffsetInitial" value="0">
-        </label>
+    <section class="data-section">
+      <div class="section-title">Individual Offset 1</div>
+      <div class="data-grid">
+        <div class="input-box">
+          <label>Initial Balance ($)
+            <input type="number" id="holder1OffsetInitial" value="0">
+          </label>
+        </div>
+        <div class="input-box">
+          <label><span>Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
+            <input type="number" id="holder1OffsetContribution" value="0">
+          </label>
+        </div>
       </div>
-      <div class="input-box">
-        <label><span>Loan Holder 1 Contribution per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
-          <input type="number" id="holder1OffsetContribution" value="0">
-        </label>
+      <div class="bottom-right">*same freq. as loan</div>
+    </section>
+    <section class="data-section">
+      <div class="section-title">Individual Offset 2</div>
+      <div class="data-grid">
+        <div class="input-box">
+          <label>Initial Balance ($)
+            <input type="number" id="holder2OffsetInitial" value="0">
+          </label>
+        </div>
+        <div class="input-box">
+          <label><span>Contributions per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
+            <input type="number" id="holder2OffsetContribution" value="0">
+          </label>
+        </div>
       </div>
-      <div class="input-box">
-        <label>Loan Holder 2 Initial Offset ($)
-          <input type="number" id="holder2OffsetInitial" value="0">
-        </label>
-      </div>
-      <div class="input-box">
-        <label><span>Loan Holder 2 Contribution per <span id="offsetFrequencyLabel">weekly</span> ($)</span>
-          <input type="number" id="holder2OffsetContribution" value="0">
-        </label>
-      </div>
+      <div class="bottom-right">*same freq. as loan</div>
+    </section>
+  </section>
+
+  <div class="summary-divider">Summary</div>
+
+  <!-- Section 5: Summary -->
+  <section class="summary-section">
+    <div class="summary-title">Frequent Contributions</div>
+    <div class="data-display">
+      <p><strong>Total:</strong> <span id="totalContributions">$0</span></p>
+      <p><strong>Joint:</strong> <span id="jointContributions">$0</span></p>
+      <p><strong>Loan Holder 1:</strong> <span id="holder1Contrib">$0</span></p>
+      <p><strong>Loan Holder 2:</strong> <span id="holder2Contrib">$0</span></p>
     </div>
   </section>
 
-  <!-- Section 5: Summary -->
-  <section id="summary" class="summary-box">
-    <h2>Summary</h2>
-    <div class="summary-grid">
-      <p><strong>Total Frequent Contributions:</strong><span id="totalContributions">$0</span></p>
-      <p><strong>Joint Frequent Contributions:</strong><span id="jointContributions">$0</span></p>
-      <p><strong>Per Loan Holder Contributions:</strong><span id="perHolderContributions">$0</span></p>
-      <p><strong>Total Repayments:</strong><span><span id="totalRepayments">$0</span> (Interest: <span id="totalInterest">$0</span>)</span></p>
-      <p><strong>Extra + Offset Savings:</strong><span id="savings">$0</span></p>
-      <p><strong>Loan Paid Off In:</strong><span><span id="loanDuration">0 years</span> (Saved: <span id="yearsSaved">0</span>)</span></p>
+  <section class="summary-section">
+    <div class="summary-title">Total Repayments</div>
+    <div class="data-display">
+      <p><strong>Total Repayments:</strong> <span id="totalRepayments">$0</span></p>
+      <p><strong>Interest Paid:</strong> <span id="totalInterest">$0</span></p>
+      <p><strong>Interest Savings from Offset:</strong> <span id="savings">$0</span></p>
       <p><strong>Interest-Free Point:</strong> <span id="interestFreePoint">N/A</span></p>
+      <p><strong>Loan Paid Off In:</strong> <span id="loanDuration">0 years</span></p>
+      <p><strong>Years Saved:</strong> <span id="yearsSaved">0</span></p>
     </div>
   </section>
 
   <!-- Section 6: Charts -->
   <section id="charts">
-    <h2>Charts</h2>
     <div class="chart-container">
       <div class="chart-box">
         <h3>Loan Balance Over Time</h3>
         <canvas id="loanChart"></canvas>
       </div>
       <div class="chart-box">
-        <h3>Offset Balance Over Time (Stacked)</h3>
+        <h3>Offset Balance Over Time</h3>
         <canvas id="offsetChart"></canvas>
       </div>
     </div>
