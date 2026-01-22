@@ -77,6 +77,10 @@ h1 {
   color: #ffffff;
 }
 
+section {
+  margin-bottom: 2rem;
+}
+
 /* ==============================
    Info Section
    ============================== */
@@ -92,42 +96,29 @@ h1 {
   margin: 0;
 }
 
-/* ==============================
-   Data Sections
-   ============================== */
-.data-section {
-  background: var(--color-muted-teal);
-  border-radius: var(--border-radius);
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-}
-
 .section-title {
-  position: absolute;
-  top: -1rem;
   right: 0;
   background: var(--color-swamp);
   color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  font-family: 'Bebas Neue', sans-serif;
+  padding: 0.2rem 1rem;
   font-size: 1.2rem;
+  position: relative;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
 
 .data-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
-  margin-top: 2rem;
+  padding: 0.5rem;
+  position: relative;
 }
 
 .data-grid.inputs {
   background-color: var(--color-muted-teal);
+  border-bottom-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
 
 .input-box {
@@ -138,6 +129,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  font-size: 0.8rem;
 }
 
 .input-box label {
@@ -170,10 +162,8 @@ h1 {
 }
 
 .bottom-right {
-  position: absolute;
-  bottom: -1rem;
+  position: relative;
   right: 0;
-  color: var(--color-forest);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   border-top-left-radius: 0;
@@ -212,16 +202,14 @@ h1 {
 }
 
 .summary-title {
-  position: absolute;
-  top: -1rem;
-  right: 0;
-  background: var(--color-swamp);
-  color: #ffffff;
-  padding: 0.5rem 1rem;
+  position: relative;
+  left: 0;
+  background: var(--color-lichen);
+  color: #000;
+  padding: 0.2rem 1rem;
   border-radius: var(--border-radius);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  font-family: 'Bebas Neue', sans-serif;
   font-size: 1.2rem;
 }
 
@@ -262,31 +250,4 @@ canvas {
   margin-top: 1rem;
   border-radius: var(--border-radius);
   background: var(--color-surface);
-}
-
-/* ==============================
-   Responsive
-   ============================== */
-@media (max-width: 768px) {
-  .data-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-container {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .section-title,
-  .summary-title,
-  .bottom-right {
-    position: static;
-    margin-bottom: 1rem;
-    border-radius: var(--border-radius);
-  }
-
-  .data-section,
-  .summary-section {
-    border-radius: var(--border-radius);
-  }
 }
