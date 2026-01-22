@@ -75,11 +75,14 @@ h1 {
   margin: 0;
   font-size: 2rem;
   color: #ffffff;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 section {
   margin-bottom: 1rem;
   max-width: 500px;
+  margin: 0 auto;
 }
 
 .section-grouper {
