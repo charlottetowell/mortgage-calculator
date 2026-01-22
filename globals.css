@@ -23,6 +23,8 @@
   --color-chart-accelerated: var(--color-lichen);
   --color-chart-holder1: var(--color-lichen);
   --color-chart-holder2: var(--color-swamp);
+
+  --max-width: 500px;
 }
 
 html, body {
@@ -40,7 +42,6 @@ body {
 }
 
 .body-inner {
-    max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
 }
@@ -62,17 +63,41 @@ header {
   z-index: 999;
 }
 
+.header-inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+}
+
+.github-link {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-family: 'Karla', sans-serif;
+}
+
+.github-icon {
+  width: 20px;
+  height: 20px;
+}
+
 h1 {
   margin: 0;
   font-size: 2rem;
   color: #ffffff;
-  max-width: 500px;
   margin: 0 auto;
 }
 
 section {
   margin-bottom: 1rem;
-  max-width: 500px;
+  max-width: var(--max-width);
   margin: 0 auto;
 }
 
