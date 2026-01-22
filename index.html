@@ -10,19 +10,27 @@
   <link rel="stylesheet" href="globals.css" />
 </head>
 <body>
-<div class="body-inner">
   <header>
     <h1>Mortgage<br>Calculator</h1>
   </header>
 
+  <div class="body-inner">
+
   <section class="info-section">
-    <p>• Info point 1<br>• Info point 2<br>• Info point 3</p>
+    <p>
+      This calculator is designed for the specific mortgage scenario of:
+      <ul>
+        <li>Two loan holders taking out a joint mortgage</li>
+        <li>Equal joint frequent contributions to an offset account (instead of extra repayments)</li>
+        <li>Individual offset accounts with regular contributions</li>
+      </ul>
+    </p>
   </section>
 
   <!-- Section 1: Basic Loan Inputs -->
   <section id="loan-inputs" class="data-section">
     <div class="section-title">Mortgage</div>
-    <div class="data-grid">
+    <div class="data-grid inputs">
       <div class="input-box">
         <label>Loan Amount ($)
           <input type="number" id="loanAmount" value="660000">
@@ -48,7 +56,7 @@
         </label>
       </div>
     </div>
-    <div class="bottom-right">Min repayments: <span id="repaymentResult"></span></div>
+    <div class="bottom-right inputs">Min repayments: <span id="repaymentResult"></span></div>
   </section>
 
   <!-- Section 2: Extra Repayments -->
@@ -78,7 +86,7 @@
         </label>
       </div>
     </div>
-    <div class="bottom-right">*same freq. as loan</div>
+    <div class="bottom-right inputs">*same freq. as loan</div>
   </section>
 
   <!-- Section 4: Individual Offsets -->
@@ -97,7 +105,7 @@
           </label>
         </div>
       </div>
-      <div class="bottom-right">*same freq. as loan</div>
+      <div class="bottom-right inputs">*same freq. as loan</div>
     </section>
     <section class="data-section">
       <div class="section-title">Individual Offset 2</div>
@@ -113,7 +121,7 @@
           </label>
         </div>
       </div>
-      <div class="bottom-right">*same freq. as loan</div>
+      <div class="bottom-right inputs">*same freq. as loan</div>
     </section>
   </section>
 

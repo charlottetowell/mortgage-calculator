@@ -24,7 +24,7 @@
 
   /* White contrasts */
   --color-forest: #354f52;
-  --color-muted-teal: #354f52;
+  --color-muted-teal: #52796f;
   --color-swamp: #8e9e97;
 
   /* Black Contrasts */
@@ -61,8 +61,9 @@ body {
 header {
   background: var(--color-swamp);
   color: #ffffff;
-  text-align: center;
-  padding: 2rem 1rem;
+  padding: 0.5rem 1rem;
+  line-height: 1;
+  text-align: left;
   font-family: 'Bebas Neue', sans-serif;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -81,9 +82,10 @@ h1 {
    ============================== */
 .info-section {
   color: #ffffff;
-  text-align: center;
+  text-align: left;
   margin-bottom: 2rem;
-  font-size: 0.9rem;
+  line-height: 1.2;
+  font-size: 0.8rem;
 }
 
 .info-section p {
@@ -122,6 +124,10 @@ h1 {
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
   margin-top: 2rem;
+}
+
+.data-grid.inputs {
+  background-color: var(--color-muted-teal);
 }
 
 .input-box {
@@ -167,13 +173,17 @@ h1 {
   position: absolute;
   bottom: -1rem;
   right: 0;
-  background: var(--color-leaf);
   color: var(--color-forest);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   font-size: 0.9rem;
+}
+
+.bottom-right.inputs {
+  background: var(--color-swamp);
+  color: #ffffff;
 }
 
 /* ==============================
@@ -185,7 +195,7 @@ h1 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.5rem;
   margin: 2rem 0 1rem;
-  border-bottom: 2px solid var(--color-swamp);
+  text-decoration: underline;
   padding-bottom: 0.5rem;
 }
 
