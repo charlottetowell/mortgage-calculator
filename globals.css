@@ -78,7 +78,7 @@ h1 {
 }
 
 section {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 /* ==============================
@@ -97,14 +97,15 @@ section {
 }
 
 .section-title {
-  right: 0;
   background: var(--color-swamp);
   color: #ffffff;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 0.5rem;
   font-size: 1.2rem;
+  font-family: 'Bebas Neue', sans-serif;
   position: relative;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
+  width: fit-content;
 }
 
 .data-grid {
@@ -163,12 +164,13 @@ section {
 
 .bottom-right {
   position: relative;
-  right: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.5rem;
   border-radius: var(--border-radius);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   font-size: 0.9rem;
+  width: fit-content;
+  margin-left: auto;
 }
 
 .bottom-right.inputs {

@@ -82,7 +82,7 @@ function calculateAndRender() {
     const totalPayments = years*paymentsPerYear;
 
     const minRepayment = periodicRate===0 ? loanAmount/totalPayments : (loanAmount*periodicRate)/(1-Math.pow(1+periodicRate, -totalPayments));
-    repaymentResultEl.textContent = `Minimum ${frequency} repayment: ${formatCurrency(minRepayment)}`;
+    repaymentResultEl.textContent = `Min. ${frequency} repayment: ${formatCurrency(minRepayment)}`;
 
     const baseline = simulateLoan({principal:loanAmount, rate:periodicRate, repayment:minRepayment, paymentsPerYear});
     const accelerated = simulateLoan({
