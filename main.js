@@ -101,10 +101,10 @@ function calculateAndRender() {
     const totalSavings = baseline.totalPaid - accelerated.totalPaid;
     const yearsSaved = Math.max(0, baseline.totalPeriods/paymentsPerYear - accelerated.totalPeriods/paymentsPerYear);
 
-    totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency}`;
-    jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency}`;
-    holder1ContribEl.textContent = `${formatCurrency(holder1Contrib)} per ${frequency}`;
-    holder2ContribEl.textContent = `${formatCurrency(holder2Contrib)} per ${frequency}`;
+    totalContribEl.textContent = `${formatCurrency(totalPerPeriodContrib)} per ${frequency.replace("ly","")}`;
+    jointContribEl.textContent = `${formatCurrency(jointContrib)} per ${frequency.replace("ly","")}`;
+    holder1ContribEl.textContent = `${formatCurrency(holder1Contrib)} per ${frequency.replace("ly","")}`;
+    holder2ContribEl.textContent = `${formatCurrency(holder2Contrib)} per ${frequency.replace("ly","")}`;
 
     totalRepaymentsEl.textContent = formatCurrency(accelerated.totalPaid);
     totalInterestEl.textContent = formatCurrency(accelerated.totalInterest);
