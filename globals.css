@@ -52,11 +52,10 @@ body {
 header {
   background:rgba(142, 158, 151, 0.9);
   color: #ffffff;
-  padding: 0.5rem 1rem;
   line-height: 1;
   text-align: left;
   font-family: 'Bebas Neue', sans-serif;
-  width: 100vw;
+  width: 100%;
   margin: 0 auto;
   position: sticky;
   top: 0;
@@ -68,6 +67,7 @@ header {
   max-width: var(--max-width);
   margin: 0 auto;
   position: relative;
+  padding: 0.5rem 1rem;
 }
 
 .github-link {
