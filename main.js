@@ -17,7 +17,6 @@ const loanTermEl = document.getElementById("loanTerm");
 const repaymentFrequencyEl = document.getElementById("repaymentFrequency");
 const repaymentResultEl = document.getElementById("repaymentResult");
 
-const extraRepaymentEl = document.getElementById("extraRepayment");
 const jointOffsetInitialEl = document.getElementById("jointOffsetInitial");
 const jointOffsetContributionEl = document.getElementById("jointOffsetContribution");
 const holder1OffsetInitialEl = document.getElementById("holder1OffsetInitial");
@@ -41,7 +40,7 @@ const loanDurationEl = document.getElementById("loanDuration");
 // --- Event listeners ---
 [
     loanAmountEl, interestRateEl, loanTermEl, repaymentFrequencyEl,
-    extraRepaymentEl, jointOffsetInitialEl, jointOffsetContributionEl,
+    jointOffsetInitialEl, jointOffsetContributionEl,
     holder1OffsetInitialEl, holder1OffsetContributionEl,
     holder2OffsetInitialEl, holder2OffsetContributionEl
 ].forEach(el => el.addEventListener("input", calculateAndRender));
@@ -60,8 +59,6 @@ function calculateAndRender() {
     const annualRate = parseFloat(interestRateEl.value)/100;
     const years = parseFloat(loanTermEl.value);
     const frequency = repaymentFrequencyEl.value;
-
-    const extraRepayment = parseFloat(extraRepaymentEl.value)||0;
 
     const jointOffsetInitial = parseFloat(jointOffsetInitialEl.value)||0;
     const jointOffsetContribution = parseFloat(jointOffsetContributionEl.value)||0;
@@ -88,14 +85,14 @@ function calculateAndRender() {
     const accelerated = simulateLoan({
         principal: loanAmount,
         rate: periodicRate,
-        repayment: minRepayment+extraRepayment,
+        repayment: minRepayment,
         paymentsPerYear,
         offsetInitials: [jointOffsetInitial, holder1Initial, holder2Initial],
         offsetContribs: [jointOffsetContribution, holder1Contribution, holder2Contribution]
     });
 
     // --- Updated Summary Calculations ---
-    const totalPerPeriodContrib = minRepayment + extraRepayment + jointOffsetContribution + holder1Contribution + holder2Contribution;
+    const totalPerPeriodContrib = minRepayment + jointOffsetContribution + holder1Contribution + holder2Contribution;
 
     const jointContrib = minRepayment + jointOffsetContribution;
     const holder1Contrib = (minRepayment + jointOffsetContribution)/2 + holder1Contribution;

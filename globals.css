@@ -79,6 +79,15 @@ h1 {
 
 section {
   margin-bottom: 1rem;
+  max-width: 500px;
+}
+
+.section-grouper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ==============================
@@ -195,28 +204,32 @@ section {
    Summary Sections
    ============================== */
 .summary-section {
-  background: var(--color-leaf);
-  border-radius: var(--border-radius);
-  border-top-right-radius: 0;
-  padding: 1rem;
+  border-radius: 0;
+  padding: 0;
   margin-bottom: 1.5rem;
   position: relative;
 }
 
 .summary-title {
   position: relative;
-  left: 0;
   background: var(--color-lichen);
   color: #000;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 1.2rem;
   border-radius: var(--border-radius);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  font-size: 1.2rem;
+  width: fit-content;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 .data-display {
-  margin-top: 2rem;
+  background: var(--color-leaf);
+  border-radius: var(--border-radius);
+  border-top-left-radius: 0;
+  padding: 1rem;
+  padding-top: 2rem;
+  margin-top: 0;
 }
 
 .data-display p {

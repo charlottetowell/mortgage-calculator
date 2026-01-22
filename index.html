@@ -27,7 +27,9 @@
     </p>
   </section>
 
-  <!-- Section 1: Basic Loan Inputs -->
+  <div class="section-grouped data-inputs">
+
+  <!-- Basic Loan Inputs -->
   <section id="loan-inputs" class="data-section">
     <div class="section-title">Mortgage</div>
     <div class="data-grid inputs">
@@ -59,19 +61,7 @@
     <div class="bottom-right inputs"><span id="repaymentResult"></span></div>
   </section>
 
-  <!-- Section 2: Extra Repayments -->
-  <section id="extra-repayments" style="display: none;">
-    <h2>Extra Repayments</h2>
-    <div class="input-row">
-      <div class="input-box">
-        <label>Extra Repayments per <span id="extraFrequencyLabel">weekly</span> ($)
-          <input type="number" id="extraRepayment" value="0">
-        </label>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 3: Joint Offset -->
+  <!-- Joint Offset -->
   <section id="joint-offset" class="data-section">
     <div class="section-title">Joint Offset</div>
     <div class="data-grid inputs">
@@ -89,7 +79,7 @@
     <div class="bottom-right inputs">*same freq. as loan</div>
   </section>
 
-  <!-- Section 4: Individual Offsets -->
+  <!-- Individual Offsets -->
   <section id="individual-offsets">
     <section class="data-section">
       <div class="section-title">Individual Offset 1</div>
@@ -125,9 +115,13 @@
     </section>
   </section>
 
+  </div>
+
   <div class="summary-divider">Summary</div>
 
-  <!-- Section 5: Summary -->
+  <div class="section-grouped summary-sections">
+
+  <!--  Summary -->
   <section class="summary-section">
     <div class="summary-title">Frequent Contributions</div>
     <div class="data-display">
@@ -150,7 +144,7 @@
     </div>
   </section>
 
-  <!-- Section 6: Charts -->
+  <!-- Charts -->
   <section id="charts">
     <div class="chart-container">
       <div class="chart-box">
@@ -163,6 +157,8 @@
       </div>
     </div>
   </section>
+
+  </div>
 
   <script src="main.js"></script>
 </div>
